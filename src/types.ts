@@ -8,9 +8,9 @@ export type config = {
     quadrants: quadrant[];
     rings: ring[];
     entries: entity[];
-    title_offset: coordinates;
-    footer_offset: coordinates;
-    legend_offset: coordinates[];
+    title_offset: cartesian;
+    footer_offset: cartesian;
+    legend_offset: cartesian[];
 }
 
 export type colors = {
@@ -47,7 +47,12 @@ export type entity = {
     moved: number;
 }
 
-export type coordinates = {
+export type cartesian = {
     x: number;
     y: number;
+}
+
+export type polar = {
+    t: number;
+    r: number;
 }
