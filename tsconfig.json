@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
         "outDir": "./build/",
-        "allowJs": true,
+        "allowJs": false,
         "esModuleInterop": true,
         "module": "CommonJS",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
         "preserveConstEnums": true,
         "removeComments": true,
         "resolveJsonModule": true,

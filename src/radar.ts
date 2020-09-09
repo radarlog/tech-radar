@@ -1,4 +1,4 @@
-function radar_visualization(d3, config) {
+function radar_visualization(d3: any, config: any) {
     // custom random number generator, to make random sequence reproducible
     // source: https://stackoverflow.com/questions/521295
     let seed = 42;
@@ -246,7 +246,7 @@ function radar_visualization(d3, config) {
             .style('user-select', 'none');
     }
 
-    function legend_transform(quadrant, ring, index = null) {
+    function legend_transform(quadrant, ring, index: number | null = null) {
         let dx = ring < 2 ? 0 : 120;
         let dy = index == null ? -16 : index * 12;
 
@@ -382,14 +382,14 @@ function radar_visualization(d3, config) {
 
     function highlightLegendItem(d) {
         const legendItem = document.getElementById('legendItem' + d.id);
-        legendItem.setAttribute('filter', 'url(#solid)');
-        legendItem.setAttribute('fill', 'white');
+        legendItem?.setAttribute('filter', 'url(#solid)');
+        legendItem?.setAttribute('fill', 'white');
     }
 
     function unhighlightLegendItem(d) {
         const legendItem = document.getElementById('legendItem' + d.id);
-        legendItem.removeAttribute('filter');
-        legendItem.removeAttribute('fill');
+        legendItem?.removeAttribute('filter');
+        legendItem?.removeAttribute('fill');
     }
 
     // draw blips on radar
