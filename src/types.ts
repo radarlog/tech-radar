@@ -1,4 +1,3 @@
-
 export type config = {
     svg_id: string;
     width: number;
@@ -55,4 +54,18 @@ export type cartesian = {
 export type polar = {
     t: number;
     r: number;
+}
+
+export type segment = {
+    clipx: (d: cartesian) => number;
+    clipy: (d: cartesian) => number;
+    random: () => cartesian;
+}
+
+export type legendItem = entity & {
+    id: string;
+    segment: segment;
+    x: number;
+    y: number;
+    color: string //????
 }

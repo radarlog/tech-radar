@@ -1,4 +1,4 @@
-import { cartesian, polar, quadrantId, ringId } from './types';
+import { cartesian, entity, legendItem, polar, quadrantId, ringId, segment } from './types';
 
 function radar_visualization(d3: any, config: any) {
     // custom random number generator, to make random sequence reproducible
@@ -57,7 +57,7 @@ function radar_visualization(d3: any, config: any) {
         };
     }
 
-    function segment(quadrant: quadrantId, ring: ringId) {
+    function segment(quadrant: quadrantId, ring: ringId): segment {
         const polar_min: polar = {
             t: config.quadrants[quadrant].radial_min * Math.PI,
             r: ring === 0 ? 30 : config.rings[ring - 1].radius,
@@ -111,7 +111,7 @@ function radar_visualization(d3: any, config: any) {
     }
 
     // position each entry randomly in its segment
-    let entry;
+    let entry: legendItem;
     for (let i = 0; i < config.entries.length; i++) {
         entry = config.entries[i];
         entry.segment = segment(entry.quadrant, entry.ring);
@@ -145,7 +145,7 @@ function radar_visualization(d3: any, config: any) {
         for (let ring = 0; ring < 4; ring++) {
             const entries = segmented[quadrant][ring];
 
-            entries.sort(function (a, b) {
+            entries.sort(function (a: entity, b: entity) {
                 return a.label.localeCompare(b.label);
             });
 
@@ -280,23 +280,23 @@ function radar_visualization(d3: any, config: any) {
             .data(segmented[quadrant][ring])
             .enter()
             .append('text')
-            .attr('transform', function (d, i) {
+            .attr('transform', function (d: legendItem, i: number) {
                 return legend_transform(quadrant, ring, i);
             })
             .attr('class', 'legend' + quadrant + ring)
-            .attr('id', function (d) {
+            .attr('id', function (d: legendItem) {
                 return 'legendItem' + d.id;
             })
-            .text(function (d) {
+            .text(function (d: legendItem) {
                 return d.id + '. ' + d.label;
             })
             .style('font-family', 'Arial, Helvetica')
             .style('font-size', '11')
-            .on('mouseover', function (event, d) {
+            .on('mouseover', function (event: MouseEvent, d: legendItem) {
                 showBubble(d);
                 highlightLegendItem(d);
             })
-            .on('mouseout', function (event, d) {
+            .on('mouseout', function (event: MouseEvent, d: legendItem) {
                 hideBubble();
                 unhighlightLegendItem(d);
             });
@@ -331,7 +331,7 @@ function radar_visualization(d3: any, config: any) {
     .attr('d', 'M 0,0 10,0 5,8 z')
     .style('fill', '#333');
 
-    function showBubble(d): void {
+    function showBubble(d: legendItem): void {
         const tooltip = d3.select('#bubble text').text(d.label);
         const bbox = tooltip.node().getBBox();
 
@@ -356,13 +356,13 @@ function radar_visualization(d3: any, config: any) {
         .style('opacity', 0);
     }
 
-    function highlightLegendItem(d) {
+    function highlightLegendItem(d: legendItem) {
         const legendItem = document.getElementById('legendItem' + d.id);
         legendItem?.setAttribute('filter', 'url(#solid)');
         legendItem?.setAttribute('fill', 'white');
     }
 
-    function unhighlightLegendItem(d) {
+    function unhighlightLegendItem(d: legendItem) {
         const legendItem = document.getElementById('legendItem' + d.id);
         legendItem?.removeAttribute('filter');
         legendItem?.removeAttribute('fill');
@@ -375,20 +375,20 @@ function radar_visualization(d3: any, config: any) {
     .enter()
     .append('g')
     .attr('class', 'blip')
-    .attr('transform', function (d, i) {
+    .attr('transform', function (d: legendItem, i: number) {
         return legend_transform(d.quadrant, d.ring, i);
     })
-    .on('mouseover', function (event, d) {
+    .on('mouseover', function (event: MouseEvent, d: legendItem) {
         showBubble(d);
         highlightLegendItem(d);
     })
-    .on('mouseout', function (event, d) {
+    .on('mouseout', function (event: MouseEvent, d: legendItem) {
         hideBubble();
         unhighlightLegendItem(d);
     });
 
     // configure each blip
-    blips.each(function (d) {
+    blips.each(function (d: legendItem) {
         let blip = d3.select(this);
 
         // blip shape
@@ -421,7 +421,7 @@ function radar_visualization(d3: any, config: any) {
 
     // make sure that blips stay inside their segment
     function ticked(): void {
-        blips.attr('transform', function (d) {
+        blips.attr('transform', function (d: legendItem) {
             return translate(d.segment.clipx(d), d.segment.clipy(d));
         });
     }

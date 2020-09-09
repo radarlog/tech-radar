@@ -4,7 +4,7 @@
         "allowJs": false,
         "esModuleInterop": true,
         "module": "CommonJS",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "noImplicitThis": false,
         "preserveConstEnums": true,
         "removeComments": true,
