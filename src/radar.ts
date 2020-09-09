@@ -110,6 +110,16 @@ function radar_visualization(d3: any, config: any) {
         };
     }
 
+    // partition entries according to segments
+    const segmented = new Array(4);
+    for (let quadrant = 0; quadrant < 4; quadrant++) {
+        segmented[quadrant] = new Array(4);
+
+        for (let ring = 0; ring < 4; ring++) {
+            segmented[quadrant][ring] = [];
+        }
+    }
+
     // position each entry randomly in its segment
     let entry: legendItem;
     for (let i = 0; i < config.entries.length; i++) {
@@ -122,20 +132,7 @@ function radar_visualization(d3: any, config: any) {
         entry.color = entry.active
             ? config.rings[entry.ring].color
             : config.colors.inactive;
-    }
 
-    // partition entries according to segments
-    const segmented = new Array(4);
-    for (let quadrant = 0; quadrant < 4; quadrant++) {
-        segmented[quadrant] = new Array(4);
-
-        for (let ring = 0; ring < 4; ring++) {
-            segmented[quadrant][ring] = [];
-        }
-    }
-
-    for (let i = 0; i < config.entries.length; i++) {
-        entry = config.entries[i];
         segmented[entry.quadrant][entry.ring].push(entry);
     }
 
