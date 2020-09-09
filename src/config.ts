@@ -1,6 +1,7 @@
 import entries from './entries';
+import { config } from './types';
 
-const config = {
+const config: config = {
     svg_id: 'radar',
     width: 1450,
     height: 1000,

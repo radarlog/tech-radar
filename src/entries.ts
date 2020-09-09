@@ -1,4 +1,6 @@
-const entries = [
+import { entity } from './types';
+
+const entries: entity[] = [
     {
         quadrant: 3,
         ring: 0,
