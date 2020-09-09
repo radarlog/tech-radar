@@ -17,31 +17,7 @@ function radar_visualization(d3: any, config: any) {
         return min + (random() + random()) * 0.5 * (max - min);
     }
 
-    // radial_min / radial_max are multiples of PI
-    const quadrants = [
-        {radial_min: 0, radial_max: 0.5, factor_x: 1, factor_y: 1},
-        {radial_min: 0.5, radial_max: 1, factor_x: -1, factor_y: 1},
-        {radial_min: -1, radial_max: -0.5, factor_x: -1, factor_y: -1},
-        {radial_min: -0.5, radial_max: 0, factor_x: 1, factor_y: -1},
-    ];
-
-    const rings = [
-        {radius: 130},
-        {radius: 220},
-        {radius: 310},
-        {radius: 400},
-    ];
-
-    const title_offset = {x: -675, y: -420};
-
-    const footer_offset = {x: -675, y: 420};
-
-    const legend_offset = [
-        {x: 450, y: 90},
-        {x: -675, y: 90},
-        {x: -675, y: -310},
-        {x: 450, y: -310},
-    ];
+    const legend_offset = config.legend_offset;
 
     function polar(cartesian) {
         const x = cartesian.x;
@@ -83,23 +59,23 @@ function radar_visualization(d3: any, config: any) {
 
     function segment(quadrant, ring) {
         const polar_min = {
-            t: quadrants[quadrant].radial_min * Math.PI,
-            r: ring === 0 ? 30 : rings[ring - 1].radius,
+            t: config.quadrants[quadrant].radial_min * Math.PI,
+            r: ring === 0 ? 30 : config.rings[ring - 1].radius,
         };
 
         const polar_max = {
-            t: quadrants[quadrant].radial_max * Math.PI,
-            r: rings[ring].radius,
+            t: config.quadrants[quadrant].radial_max * Math.PI,
+            r: config.rings[ring].radius,
         };
 
         const cartesian_min = {
-            x: 15 * quadrants[quadrant].factor_x,
-            y: 15 * quadrants[quadrant].factor_y,
+            x: 15 * config.quadrants[quadrant].factor_x,
+            y: 15 * config.quadrants[quadrant].factor_y,
         };
 
         const cartesian_max = {
-            x: rings[3].radius * quadrants[quadrant].factor_x,
-            y: rings[3].radius * quadrants[quadrant].factor_y,
+            x: config.rings[3].radius * config.quadrants[quadrant].factor_x,
+            y: config.rings[3].radius * config.quadrants[quadrant].factor_y,
         };
 
         return {
@@ -225,18 +201,18 @@ function radar_visualization(d3: any, config: any) {
     filter.append('feComposite').attr('in', 'SourceGraphic');
 
     // draw rings
-    for (let i = 0; i < rings.length; i++) {
+    for (let i = 0; i < config.rings.length; i++) {
         grid.append('circle')
-            .attr('cx', 0)
-            .attr('cy', 0)
-            .attr('r', rings[i].radius)
-            .style('fill', 'none')
-            .style('stroke', config.colors.grid)
-            .style('stroke-width', 1);
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('r', config.rings[i].radius)
+        .style('fill', 'none')
+        .style('stroke', config.colors.grid)
+        .style('stroke-width', 1);
 
         grid.append('text')
-            .text(config.rings[i].name)
-            .attr('y', -rings[i].radius + 62)
+        .text(config.rings[i].name)
+        .attr('y', -config.rings[i].radius + 62)
             .attr('text-anchor', 'middle')
             .style('fill', '#e5e5e5')
             .style('font-family', 'Arial, Helvetica')
@@ -262,16 +238,16 @@ function radar_visualization(d3: any, config: any) {
 
     // draw title
     radar
-        .append('text')
-        .attr('transform', translate(title_offset.x, title_offset.y))
+    .append('text')
+    .attr('transform', translate(config.title_offset.x, config.title_offset.y))
         .text(config.title)
         .style('font-family', 'Arial, Helvetica')
         .style('font-size', '34');
 
     // draw footer
     radar
-        .append('text')
-        .attr('transform', translate(footer_offset.x, footer_offset.y))
+    .append('text')
+    .attr('transform', translate(config.footer_offset.x, config.footer_offset.y))
         .text('▲ moved up     ▼ moved down')
         .attr('xml:space', 'preserve')
         .style('font-family', 'Arial, Helvetica')

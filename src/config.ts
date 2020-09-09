@@ -11,17 +11,25 @@ const config: config = {
         inactive: '#ddd',
     },
     title: 'Tech Radar',
+    title_offset: {x: -675, y: -420},
+    footer_offset: {x: -675, y: 420},
+    legend_offset: [
+        {x: 450, y: 90},
+        {x: -675, y: 90},
+        {x: -675, y: -310},
+        {x: 450, y: -310},
+    ],
     quadrants: [
-        {name: 'Languages'},
-        {name: 'Infrastructure'},
-        {name: 'Frameworks'},
-        {name: 'Data Management'},
+        {id: 1, name: 'Languages', radial_min: 0, radial_max: 0.5, factor_x: 1, factor_y: 1},
+        {id: 2, name: 'Infrastructure', radial_min: 0.5, radial_max: 1, factor_x: -1, factor_y: 1},
+        {id: 3, name: 'Frameworks', radial_min: -1, radial_max: -0.5, factor_x: -1, factor_y: -1},
+        {id: 4, name: 'Data Management', radial_min: -0.5, radial_max: 0, factor_x: 1, factor_y: -1},
     ],
     rings: [
-        {name: 'ADOPT', color: '#93c47d'},
-        {name: 'TRIAL', color: '#93d2c2'},
-        {name: 'ASSESS', color: '#fbdb84'},
-        {name: 'HOLD', color: '#efafa9'},
+        {id: 1, radius: 130, name: 'ADOPT', color: '#93c47d'},
+        {id: 2, radius: 220, name: 'TRIAL', color: '#93d2c2'},
+        {id: 3, radius: 310, name: 'ASSESS', color: '#fbdb84'},
+        {id: 4, radius: 400, name: 'HOLD', color: '#efafa9'},
     ],
     entries: entries
 };
