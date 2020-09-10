@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { Selection } from 'd3';
-import { cartesian, entity, legendItem, polar, quadrantId, ringId, segment } from './types';
+import { blip, cartesian, entity, polar, quadrantId, ringId, segment } from './types';
 
 export default class Radar {
     private readonly segmented: any[quadrantId][ringId][];
@@ -129,7 +129,7 @@ export default class Radar {
     private createSegmented(): any[quadrantId][ringId][] {
         let segmented: any[quadrantId][ringId][] = new Array(4);
 
-        // partition entries according to segments
+        // partition blips according to segments
         for (let quadrant = 0; quadrant < 4; quadrant++) {
             segmented[quadrant] = new Array(4);
 
@@ -138,32 +138,32 @@ export default class Radar {
             }
         }
 
-        // position each entry randomly in its segment
-        let entry: legendItem;
+        // position each blip randomly in its segment
+        let blip: blip;
         for (let i = 0; i < this.config.entries.length; i++) {
-            entry = this.config.entries[i];
-            entry.segment = this.segment(entry.quadrant, entry.ring);
+            blip = this.config.entries[i];
+            blip.segment = this.segment(blip.quadrant, blip.ring);
 
-            const point = entry.segment.random();
-            entry.x = point.x;
-            entry.y = point.y;
-            entry.color = entry.active
-                ? this.config.rings[entry.ring].color
+            const point = blip.segment.random();
+            blip.x = point.x;
+            blip.y = point.y;
+            blip.color = blip.active
+                ? this.config.rings[blip.ring].color
                 : this.config.colors.inactive;
 
-            segmented[entry.quadrant][entry.ring].push(entry);
+            segmented[blip.quadrant][blip.ring].push(blip);
         }
 
-        // assign unique sequential id to each entry
+        // assign unique sequential id to each blip
         let id = 1;
         for (let quadrant of [2, 3, 1, 0]) {
             for (let ring = 0; ring < 4; ring++) {
-                const entries = segmented[quadrant][ring];
+                const blips = segmented[quadrant][ring];
 
-                entries.sort((a: entity, b: entity) => a.label.localeCompare(b.label));
+                blips.sort((a: entity, b: entity) => a.label.localeCompare(b.label));
 
-                for (let i = 0; i < entries.length; i++) {
-                    entries[i].id = '' + id++;
+                for (let i = 0; i < blips.length; i++) {
+                    blips[i].id = '' + id++;
                 }
             }
         }
@@ -273,17 +273,17 @@ export default class Radar {
                     .data(this.segmented[quadrant][ring])
                     .enter()
                     .append('text')
-                    .attr('transform', (d: legendItem, i: number) => this.legendTransform(quadrant, ring, i))
+                    .attr('transform', (d: blip, i: number) => this.legendTransform(quadrant, ring, i))
                     .attr('class', 'legend' + quadrant + ring)
-                    .attr('id', (d: legendItem) => 'legendItem' + d.id)
-                    .text((d: legendItem) => d.id + '. ' + d.label)
+                    .attr('id', (d: blip) => 'legendItem' + d.id)
+                    .text((d: blip) => d.id + '. ' + d.label)
                     .style('font-family', 'Arial, Helvetica')
                     .style('font-size', '11')
-                    .on('mouseover', (d: legendItem) => {
+                    .on('mouseover', (d: blip) => {
                         Radar.showBubble(d);
                         Radar.highlightLegendItem(d);
                     })
-                    .on('mouseout', (d: legendItem) => {
+                    .on('mouseout', (d: blip) => {
                         Radar.hideBubble();
                         Radar.unhighlightLegendItem(d);
                     });
@@ -324,18 +324,18 @@ export default class Radar {
             .enter()
             .append('g')
             .attr('class', 'blip')
-            .attr('transform', (d: legendItem, i: number) => this.legendTransform(d.quadrant, d.ring, i))
-            .on('mouseover', (d: legendItem) => {
+            .attr('transform', (d: blip, i: number) => this.legendTransform(d.quadrant, d.ring, i))
+            .on('mouseover', (d: blip) => {
                 Radar.showBubble(d);
                 Radar.highlightLegendItem(d);
             })
-            .on('mouseout', (d: legendItem) => {
+            .on('mouseout', (d: blip) => {
                 Radar.hideBubble();
                 Radar.unhighlightLegendItem(d);
             });
 
         // this.configure each blip
-        blips.each(function (d: legendItem) {
+        blips.each(function (d: blip) {
             let blip = d3.select(this);
 
             // blip shape
@@ -374,7 +374,7 @@ export default class Radar {
 
     // make sure that blips stay inside their segment
     private static ticked(blips: Selection<SVGElement, blip, SVGGElement, unknown>): void {
-        blips.attr('transform', (d: legendItem) => Radar.transform(d.segment.clipx(d), d.segment.clipy(d)));
+        blips.attr('transform', (d: blip) => Radar.transform(d.segment.clipx(d), d.segment.clipy(d)));
     }
 
     private legendTransform(quadrant: quadrantId, ring: ringId, index: number | null = null) {
@@ -391,7 +391,7 @@ export default class Radar {
         );
     }
 
-    private static showBubble(d: legendItem): void {
+    private static showBubble(d: blip): void {
         const tooltip = d3.select('#bubble text').text(d.label).node() as SVGTextElement;
         const bbox = tooltip.getBBox();
 
@@ -416,13 +416,13 @@ export default class Radar {
             .style('opacity', 0);
     }
 
-    private static highlightLegendItem(d: legendItem) {
+    private static highlightLegendItem(d: blip) {
         const legendItem = document.getElementById('legendItem' + d.id);
         legendItem?.setAttribute('filter', 'url(#solid)');
         legendItem?.setAttribute('fill', 'white');
     }
 
-    private static unhighlightLegendItem(d: legendItem) {
+    private static unhighlightLegendItem(d: blip) {
         const legendItem = document.getElementById('legendItem' + d.id);
         legendItem?.removeAttribute('filter');
         legendItem?.removeAttribute('fill');

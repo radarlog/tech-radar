@@ -62,7 +62,7 @@ export type segment = {
     random: () => cartesian;
 }
 
-export type legendItem = entity & {
+export type blip = entity & {
     id: string;
     segment: segment;
     x: number;
