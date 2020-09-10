@@ -1,4 +1,4 @@
 import config from './config';
-import radar_visualization from './radar';
+import Radar from './radar';
 
-radar_visualization(config);
+new Radar(config);
