@@ -3,7 +3,6 @@ import { config } from './types';
 
 const config: config = {
     seed: 330,
-    svg_id: 'radar',
     width: 1450,
     height: 1000,
     colors: {

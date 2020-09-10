@@ -3,22 +3,22 @@ import { Selection } from 'd3';
 import { cartesian, entity, legendItem, polar, quadrantId, ringId, segment } from './types';
 
 export default class Radar {
-    private segmented = new Array(4);
-
-    private readonly radar: Selection<any, any, any, any>;
+    private readonly segmented: any[quadrantId][ringId][];
 
     constructor(private readonly config: any) {
-        this.createSegmented();
+        this.segmented = this.createSegmented();
+    }
 
-        this.radar = d3
-            .select('svg#' + this.config.svg_id)
+    render(svg: HTMLElement): void {
+        const radar = d3
+            .select('svg#' + svg.id)
             .style('background-color', this.config.colors.background)
             .attr('width', this.config.width)
             .attr('height', this.config.height)
             .append('g')
             .attr('transform', Radar.transform(this.config.width / 2, this.config.height / 2));
 
-        this.svg();
+        this.draw(radar);
     }
 
     private random(): number {
@@ -126,13 +126,15 @@ export default class Radar {
         };
     }
 
-    private createSegmented() {
+    private createSegmented(): any[quadrantId][ringId][] {
+        let segmented: any[quadrantId][ringId][] = new Array(4);
+
         // partition entries according to segments
         for (let quadrant = 0; quadrant < 4; quadrant++) {
-            this.segmented[quadrant] = new Array(4);
+            segmented[quadrant] = new Array(4);
 
             for (let ring = 0; ring < 4; ring++) {
-                this.segmented[quadrant][ring] = [];
+                segmented[quadrant][ring] = [];
             }
         }
 
@@ -149,14 +151,14 @@ export default class Radar {
                 ? this.config.rings[entry.ring].color
                 : this.config.colors.inactive;
 
-            this.segmented[entry.quadrant][entry.ring].push(entry);
+            segmented[entry.quadrant][entry.ring].push(entry);
         }
 
         // assign unique sequential id to each entry
         let id = 1;
         for (let quadrant of [2, 3, 1, 0]) {
             for (let ring = 0; ring < 4; ring++) {
-                const entries = this.segmented[quadrant][ring];
+                const entries = segmented[quadrant][ring];
 
                 entries.sort((a: entity, b: entity) => a.label.localeCompare(b.label));
 
@@ -165,14 +167,16 @@ export default class Radar {
                 }
             }
         }
+
+        return segmented;
     }
 
     private static transform(x: number, y: number): string {
         return 'translate(' + x + ',' + y + ')';
     }
 
-    svg() {
-        const grid = this.radar.append('g');
+    private draw(radar: Selection<SVGElement, unknown, HTMLElement, any>) {
+        const grid = radar.append('g');
 
         // draw grid lines
         grid.append('line')
@@ -226,7 +230,7 @@ export default class Radar {
         }
 
         // draw title
-        this.radar
+        radar
             .append('text')
             .attr('transform', Radar.transform(this.config.title_offset.x, this.config.title_offset.y))
             .text(this.config.title)
@@ -234,7 +238,7 @@ export default class Radar {
             .style('font-size', '34');
 
         // draw footer
-        this.radar
+        radar
             .append('text')
             .attr('transform', Radar.transform(this.config.footer_offset.x, this.config.footer_offset.y))
             .text('▲ moved up     ▼ moved down')
@@ -243,7 +247,7 @@ export default class Radar {
             .style('font-size', '10');
 
         // draw legend
-        const legend = this.radar.append('g');
+        const legend = radar.append('g');
         for (let quadrant = 0; quadrant < 4; quadrant++) {
             legend
                 .append('text')
@@ -287,10 +291,10 @@ export default class Radar {
         }
 
         // layer for entries
-        const rink = this.radar.append('g').attr('id', 'rink');
+        const rink = radar.append('g').attr('id', 'rink');
 
         // rollover bubble (on top of everything else)
-        const bubble = this.radar
+        const bubble = radar
             .append('g')
             .attr('id', 'bubble')
             .attr('x', 0)
@@ -369,7 +373,7 @@ export default class Radar {
     }
 
     // make sure that blips stay inside their segment
-    private static ticked(blips: any): void {
+    private static ticked(blips: Selection<SVGElement, blip, SVGGElement, unknown>): void {
         blips.attr('transform', (d: legendItem) => Radar.transform(d.segment.clipx(d), d.segment.clipy(d)));
     }
 

@@ -1,6 +1,5 @@
 export type config = {
     seed: number;
-    svg_id: string;
     width: number;
     height: number;
     colors: colors;
