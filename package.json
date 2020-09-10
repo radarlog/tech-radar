@@ -12,7 +12,7 @@
         "linter": "eslint src"
     },
     "dependencies": {
-        "d3": "^6.1.1"
+        "d3": "4.13"
     },
     "devDependencies": {
         "@types/d3": "^5.7.2",

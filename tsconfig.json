@@ -10,7 +10,8 @@
         "removeComments": true,
         "resolveJsonModule": true,
         "sourceMap": true,
-        "strict": true
+        "strict": true,
+        "strictFunctionTypes": false
     },
     "include": [
         "src/**/*.ts"

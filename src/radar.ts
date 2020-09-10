@@ -1,6 +1,7 @@
+import * as d3 from 'd3';
 import { cartesian, entity, legendItem, polar, quadrantId, ringId, segment } from './types';
 
-function radar_visualization(d3: any, config: any) {
+function radar_visualization(config: any) {
     function random(): number {
         // custom random number generator, to make random sequence reproducible
         // source: https://stackoverflow.com/questions/521295
@@ -287,11 +288,11 @@ function radar_visualization(d3: any, config: any) {
                 })
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '11')
-                .on('mouseover', function (event: MouseEvent, d: legendItem) {
+                .on('mouseover', function (d: legendItem) {
                     showBubble(d);
                     highlightLegendItem(d);
                 })
-                .on('mouseout', function (event: MouseEvent, d: legendItem) {
+                .on('mouseout', function (d: legendItem) {
                     hideBubble();
                     unhighlightLegendItem(d);
                 });
@@ -327,8 +328,8 @@ function radar_visualization(d3: any, config: any) {
         .style('fill', '#333');
 
     function showBubble(d: legendItem): void {
-        const tooltip = d3.select('#bubble text').text(d.label);
-        const bbox = tooltip.node().getBBox();
+        const tooltip = d3.select('#bubble text').text(d.label).node() as SVGTextElement;
+        const bbox = tooltip.getBBox();
 
         d3.select('#bubble')
             .attr('transform', translate(d.x - bbox.width / 2, d.y - 16))
@@ -373,11 +374,11 @@ function radar_visualization(d3: any, config: any) {
         .attr('transform', function (d: legendItem, i: number) {
             return legend_transform(d.quadrant, d.ring, i);
         })
-        .on('mouseover', function (event: MouseEvent, d: legendItem) {
+        .on('mouseover', function (d: legendItem) {
             showBubble(d);
             highlightLegendItem(d);
         })
-        .on('mouseout', function (event: MouseEvent, d: legendItem) {
+        .on('mouseout', function (d: legendItem) {
             hideBubble();
             unhighlightLegendItem(d);
         });
