@@ -78,7 +78,7 @@ function radar_visualization(config: any) {
         };
 
         return {
-            clipx: function (d: cartesian): number {
+            clipx: (d: cartesian): number => {
                 const c = bounded_box(d, cartesian_min, cartesian_max);
                 const p = bounded_ring(
                     polar(c),
@@ -89,7 +89,7 @@ function radar_visualization(config: any) {
 
                 return d.x;
             },
-            clipy: function (d: cartesian): number {
+            clipy: (d: cartesian): number => {
                 const c = bounded_box(d, cartesian_min, cartesian_max);
                 const p = bounded_ring(
                     polar(c),
@@ -100,12 +100,10 @@ function radar_visualization(config: any) {
 
                 return d.y;
             },
-            random: function (): cartesian {
-                return cartesian({
-                    t: random_between(polar_min.t, polar_max.t),
-                    r: normal_between(polar_min.r, polar_max.r),
-                });
-            },
+            random: (): cartesian => cartesian({
+                t: random_between(polar_min.t, polar_max.t),
+                r: normal_between(polar_min.r, polar_max.r),
+            }),
         };
     }
 
@@ -141,9 +139,7 @@ function radar_visualization(config: any) {
         for (let ring = 0; ring < 4; ring++) {
             const entries = segmented[quadrant][ring];
 
-            entries.sort(function (a: entity, b: entity) {
-                return a.label.localeCompare(b.label);
-            });
+            entries.sort((a: entity, b: entity) => a.label.localeCompare(b.label));
 
             for (let i = 0; i < entries.length; i++) {
                 entries[i].id = '' + id++;
@@ -276,23 +272,17 @@ function radar_visualization(config: any) {
                 .data(segmented[quadrant][ring])
                 .enter()
                 .append('text')
-                .attr('transform', function (d: legendItem, i: number) {
-                    return legend_transform(quadrant, ring, i);
-                })
+                .attr('transform', (d: legendItem, i: number) => legend_transform(quadrant, ring, i))
                 .attr('class', 'legend' + quadrant + ring)
-                .attr('id', function (d: legendItem) {
-                    return 'legendItem' + d.id;
-                })
-                .text(function (d: legendItem) {
-                    return d.id + '. ' + d.label;
-                })
+                .attr('id', (d: legendItem) => 'legendItem' + d.id)
+                .text((d: legendItem) => d.id + '. ' + d.label)
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '11')
-                .on('mouseover', function (d: legendItem) {
+                .on('mouseover', (d: legendItem) => {
                     showBubble(d);
                     highlightLegendItem(d);
                 })
-                .on('mouseout', function (d: legendItem) {
+                .on('mouseout', (d: legendItem) => {
                     hideBubble();
                     unhighlightLegendItem(d);
                 });
@@ -371,14 +361,12 @@ function radar_visualization(config: any) {
         .enter()
         .append('g')
         .attr('class', 'blip')
-        .attr('transform', function (d: legendItem, i: number) {
-            return legend_transform(d.quadrant, d.ring, i);
-        })
-        .on('mouseover', function (d: legendItem) {
+        .attr('transform', (d: legendItem, i: number) => legend_transform(d.quadrant, d.ring, i))
+        .on('mouseover', (d: legendItem) => {
             showBubble(d);
             highlightLegendItem(d);
         })
-        .on('mouseout', function (d: legendItem) {
+        .on('mouseout', (d: legendItem) => {
             hideBubble();
             unhighlightLegendItem(d);
         });
@@ -408,18 +396,14 @@ function radar_visualization(config: any) {
             .attr('text-anchor', 'middle')
             .style('fill', '#fff')
             .style('font-family', 'Arial, Helvetica')
-            .style('font-size', function () {
-                return blip_text.length > 2 ? '8' : '9';
-            })
+            .style('font-size', () => blip_text.length > 2 ? '8' : '9')
             .style('pointer-events', 'none')
             .style('user-select', 'none');
     });
 
     // make sure that blips stay inside their segment
     function ticked(): void {
-        blips.attr('transform', function (d: legendItem) {
-            return translate(d.segment.clipx(d), d.segment.clipy(d));
-        });
+        blips.attr('transform', (d: legendItem) => translate(d.segment.clipx(d), d.segment.clipy(d)));
     }
 
     // distribute blips, while avoiding collisions
