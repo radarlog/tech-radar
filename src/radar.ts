@@ -228,8 +228,8 @@ function radar_visualization(d3: any, config: any) {
         }
 
         return translate(
-            config.legend_offset[quadrant].x + dx,
-            config.legend_offset[quadrant].y + dy
+            config.quadrants[quadrant].legend_offset.x + dx,
+            config.quadrants[quadrant].legend_offset.y + dy
         );
     }
 
@@ -256,8 +256,8 @@ function radar_visualization(d3: any, config: any) {
         legend
             .append('text')
             .attr('transform', translate(
-                config.legend_offset[quadrant].x,
-                config.legend_offset[quadrant].y - 45
+                config.quadrants[quadrant].legend_offset.x,
+                config.quadrants[quadrant].legend_offset.y - 45
             ))
             .text(config.quadrants[quadrant].name)
             .style('font-family', 'Arial, Helvetica')

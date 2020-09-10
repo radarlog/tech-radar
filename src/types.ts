@@ -9,7 +9,6 @@ export type config = {
     entries: entity[];
     title_offset: cartesian;
     footer_offset: cartesian;
-    legend_offset: cartesian[];
 }
 
 export type colors = {
@@ -27,6 +26,7 @@ export type quadrant = {
     radial_max: number; // is multiples of PI
     factor_x: number;
     factor_y: number;
+    legend_offset: cartesian
 }
 
 export type ringId = number;
