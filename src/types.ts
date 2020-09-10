@@ -1,4 +1,5 @@
 export type config = {
+    seed: number;
     svg_id: string;
     width: number;
     height: number;
@@ -67,5 +68,5 @@ export type legendItem = entity & {
     segment: segment;
     x: number;
     y: number;
-    color: string //????
+    color: string;
 }

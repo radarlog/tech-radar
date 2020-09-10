@@ -1,12 +1,10 @@
 import { cartesian, entity, legendItem, polar, quadrantId, ringId, segment } from './types';
 
 function radar_visualization(d3: any, config: any) {
-    // custom random number generator, to make random sequence reproducible
-    // source: https://stackoverflow.com/questions/521295
-    let seed = 42;
-
     function random(): number {
-        const x = Math.sin(seed++) * 10000;
+        // custom random number generator, to make random sequence reproducible
+        // source: https://stackoverflow.com/questions/521295
+        const x = Math.sin(config.seed++) * 10000;
 
         return x - Math.floor(x);
     }
