@@ -5,13 +5,9 @@
         "esModuleInterop": true,
         "module": "CommonJS",
         "noImplicitAny": true,
-        "noImplicitThis": false,
-        "preserveConstEnums": true,
         "removeComments": true,
-        "resolveJsonModule": true,
         "sourceMap": true,
         "strict": true,
-        "strictFunctionTypes": false,
         "target": "ES2019"
     },
     "include": [

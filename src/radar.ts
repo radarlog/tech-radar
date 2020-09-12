@@ -187,7 +187,7 @@ export default class Radar {
         return 'translate(' + x + ',' + y + ')';
     }
 
-    private draw(radar: Selection<SVGElement, unknown, HTMLElement, any>) {
+    private draw(radar: Selection<SVGGElement, unknown, HTMLElement, any>) {
         const grid = radar.append('g');
 
         // draw grid lines
@@ -385,7 +385,7 @@ export default class Radar {
     }
 
     // make sure that blips stay inside their segment
-    private static ticked(blips: Selection<SVGElement, blip, SVGGElement, unknown>): void {
+    private static ticked(blips: Selection<SVGGElement, blip, SVGGElement, unknown>): void {
         blips.attr('transform', (d: blip) => Radar.transform(d.segment.clipx(d), d.segment.clipy(d)));
     }
 
