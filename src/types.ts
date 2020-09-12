@@ -1,4 +1,4 @@
-export type config = {
+export type config = Readonly<{
     seed: number;
     width: number;
     height: number;
@@ -9,7 +9,7 @@ export type config = {
     entries: entry[];
     titleOffset: cartesian;
     footerOffset: cartesian;
-};
+}>;
 
 export type colors = {
     background: string;

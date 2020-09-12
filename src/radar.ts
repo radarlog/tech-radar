@@ -4,7 +4,11 @@ import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment } fr
 export default class Radar {
     private readonly segmentedBlips: blip[][][];
 
+    private seed: number;
+
     constructor(private readonly config: config) {
+        this.seed = config.seed;
+
         this.segmentedBlips = this.createSegmentedBlips();
     }
 
@@ -19,10 +23,10 @@ export default class Radar {
         this.draw(radar);
     }
 
+    // custom random number generator, to make random sequence reproducible
+    // source: https://stackoverflow.com/questions/521295
     private random(): number {
-        // custom random number generator, to make random sequence reproducible
-        // source: https://stackoverflow.com/questions/521295
-        const x = Math.sin(this.config.seed++) * 10000;
+        const x = Math.sin(this.seed++) * 10000;
 
         return x - Math.floor(x);
     }
