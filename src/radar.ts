@@ -1,5 +1,4 @@
-import * as d3 from 'd3';
-import { Selection } from 'd3';
+import { forceCollide, forceSimulation, select, Selection } from 'd3';
 import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment } from './types';
 
 export default class Radar {
@@ -10,8 +9,7 @@ export default class Radar {
     }
 
     render(svg: HTMLElement): void {
-        const radar = d3
-            .select('svg#' + svg.id)
+        const radar = select('svg#' + svg.id)
             .style('background-color', this.config.colors.background)
             .attr('width', this.config.width)
             .attr('height', this.config.height)
@@ -348,7 +346,7 @@ export default class Radar {
 
         // this.configure each blip
         blips.each(function (d: blip) {
-            let blip = d3.select(this);
+            let blip = select(this);
 
             // blip shape
             if (d.moved > 0) {
@@ -377,10 +375,10 @@ export default class Radar {
         });
 
         // distribute blips, while avoiding collisions
-        d3.forceSimulation()
+        forceSimulation()
             .nodes(this.segmentedBlips.flat(3))
             .velocityDecay(0.19) // magic number (found by experimentation)
-            .force('collision', d3.forceCollide().radius(12).strength(0.85))
+            .force('collision', forceCollide().radius(12).strength(0.85))
             .on('tick', () => Radar.ticked(blips));
     }
 
@@ -404,26 +402,26 @@ export default class Radar {
     }
 
     private static showBubble(d: blip): void {
-        const tooltip = d3.select('#bubble text').text(d.label).node() as SVGTextElement;
+        const tooltip = select('#bubble text').text(d.label).node() as SVGTextElement;
         const bbox = tooltip.getBBox();
 
-        d3.select('#bubble')
+        select('#bubble')
             .attr('transform', Radar.transform(d.x - bbox.width / 2, d.y - 16))
             .style('opacity', 0.8);
 
-        d3.select('#bubble rect')
+        select('#bubble rect')
             .attr('x', -5)
             .attr('y', -bbox.height)
             .attr('width', bbox.width + 10)
             .attr('height', bbox.height + 4);
 
-        d3.select('#bubble path').attr('transform', Radar.transform(
+        select('#bubble path').attr('transform', Radar.transform(
             bbox.width / 2 - 5, 3
         ));
     }
 
     private static hideBubble(): void {
-        d3.select('#bubble')
+        select('#bubble')
             .attr('transform', Radar.transform(0, 0))
             .style('opacity', 0);
     }
