@@ -1,3 +1,5 @@
+import { Selection } from 'd3';
+
 export type config = Readonly<{
     seed: number;
     width: number;
@@ -69,3 +71,5 @@ export type blip = entry & {
     y: number;
     color: string;
 };
+
+export type svg = Selection<SVGGElement, unknown, HTMLElement, string>;

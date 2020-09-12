@@ -1,5 +1,5 @@
-import { forceCollide, forceSimulation, select, Selection } from 'd3';
-import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment } from './types';
+import { forceCollide, forceSimulation, select } from 'd3';
+import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment, svg } from './types';
 
 export default class Radar {
     private readonly segmentedBlips: blip[][][];
@@ -20,7 +20,13 @@ export default class Radar {
             .append('g')
             .attr('transform', Radar.transform(this.config.width / 2, this.config.height / 2));
 
-        this.draw(radar);
+        this.drawGrid(radar);
+        this.drawTitle(radar);
+        this.drawFooter(radar);
+        this.drawLegend(radar);
+        this.drawBlips(radar);
+
+        Radar.drawBubbles(radar);
     }
 
     // custom random number generator, to make random sequence reproducible
@@ -189,10 +195,14 @@ export default class Radar {
         return 'translate(' + x + ',' + y + ')';
     }
 
-    private draw(radar: Selection<SVGGElement, unknown, HTMLElement, string>) {
+    private drawGrid(radar: svg): void {
         const grid = radar.append('g');
 
-        // draw grid lines
+        this.drawLines(grid);
+        this.drawRings(grid);
+    }
+
+    private drawLines(grid: svg): void {
         grid.append('line')
             .attr('x1', 0)
             .attr('y1', -400)
@@ -200,6 +210,7 @@ export default class Radar {
             .attr('y2', 400)
             .style('stroke', this.config.colors.grid)
             .style('stroke-width', 1);
+
         grid.append('line')
             .attr('x1', -400)
             .attr('y1', 0)
@@ -220,8 +231,9 @@ export default class Radar {
             .attr('id', 'solid');
         filter.append('feFlood').attr('flood-color', 'rgb(0, 0, 0, 0.8)');
         filter.append('feComposite').attr('in', 'SourceGraphic');
+    }
 
-        // draw rings
+    private drawRings(grid: svg): void {
         for (let i = 0; i < this.config.rings.length; i++) {
             grid.append('circle')
                 .attr('cx', 0)
@@ -242,16 +254,18 @@ export default class Radar {
                 .style('pointer-events', 'none')
                 .style('user-select', 'none');
         }
+    }
 
-        // draw title
+    private drawTitle(radar: svg): void {
         radar
             .append('text')
             .attr('transform', Radar.transform(this.config.titleOffset.x, this.config.titleOffset.y))
             .text(this.config.title)
             .style('font-family', 'Arial, Helvetica')
             .style('font-size', '34');
+    }
 
-        // draw footer
+    private drawFooter(radar: svg): void {
         radar
             .append('text')
             .attr('transform', Radar.transform(this.config.footerOffset.x, this.config.footerOffset.y))
@@ -259,9 +273,11 @@ export default class Radar {
             .attr('xml:space', 'preserve')
             .style('font-family', 'Arial, Helvetica')
             .style('font-size', '10');
+    }
 
-        // draw legend
+    private drawLegend(radar: svg): void {
         const legend = radar.append('g');
+
         for (let quadrant = 0; quadrant < 4; quadrant++) {
             legend
                 .append('text')
@@ -303,11 +319,9 @@ export default class Radar {
                     });
             }
         }
+    }
 
-        // layer for entries
-        const rink = radar.append('g').attr('id', 'rink');
-
-        // rollover bubble (on top of everything else)
+    private static drawBubbles(radar: svg): void {
         const bubble = radar
             .append('g')
             .attr('id', 'bubble')
@@ -330,6 +344,11 @@ export default class Radar {
             .append('path')
             .attr('d', 'M 0,0 10,0 5,8 z')
             .style('fill', '#333');
+    }
+
+    private drawBlips(radar: svg): void {
+        // layer for entries
+        const rink = radar.append('g').attr('id', 'rink');
 
         // draw blips on radar
         const blips = rink
@@ -383,12 +402,10 @@ export default class Radar {
             .nodes(this.segmentedBlips.flat(3))
             .velocityDecay(0.19) // magic number (found by experimentation)
             .force('collision', forceCollide().radius(12).strength(0.85))
-            .on('tick', () => Radar.ticked(blips));
-    }
-
-    // make sure that blips stay inside their segment
-    private static ticked(blips: Selection<SVGGElement, blip, SVGGElement, unknown>): void {
-        blips.attr('transform', (d: blip) => Radar.transform(d.segment.clipx(d), d.segment.clipy(d)));
+            .on('tick', () => blips.attr('transform', (d: blip) => Radar.transform(
+                d.segment.clipx(d),
+                d.segment.clipy(d)
+            )));
     }
 
     private legendTransform(quadrant: quadrantId, ring: ringId, index?: number) {
