@@ -2,12 +2,18 @@ import { forceCollide, forceSimulation, select } from 'd3';
 import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment, svg } from './types';
 
 export default class Radar {
-    private readonly segmentedBlips: blip[][][];
-
     private seed: number;
+
+    private readonly ringsCount: number;
+    private readonly quadrantsCount: number;
+
+    private readonly segmentedBlips: blip[][][];
 
     constructor(private readonly config: config) {
         this.seed = config.seed;
+
+        this.ringsCount = config.rings.length;
+        this.quadrantsCount = config.quadrants.length;
 
         this.segmentedBlips = this.createSegmentedBlips();
     }
@@ -155,13 +161,13 @@ export default class Radar {
     }
 
     private createSegmentedBlips(): blip[][][] {
-        const segmented: blip[][][] = new Array(4);
+        const segmented: blip[][][] = new Array(this.quadrantsCount);
 
         // partition blips according to segments
-        for (let quadrant = 0; quadrant < 4; quadrant++) {
-            segmented[quadrant] = new Array(4);
+        for (let quadrant = 0; quadrant < this.quadrantsCount; quadrant++) {
+            segmented[quadrant] = new Array(this.ringsCount);
 
-            for (let ring = 0; ring < 4; ring++) {
+            for (let ring = 0; ring < this.ringsCount; ring++) {
                 segmented[quadrant][ring] = [];
             }
         }
@@ -175,15 +181,15 @@ export default class Radar {
         }
 
         // assign unique sequential id to each blip
-        let id = 1;
+        let blipId = 1;
         for (const quadrant of [2, 3, 1, 0]) {
-            for (let ring = 0; ring < 4; ring++) {
+            for (let ring = 0; ring < this.ringsCount; ring++) {
                 const blips = segmented[quadrant][ring];
 
                 blips.sort((a: blip, b: blip) => a.label.localeCompare(b.label));
 
                 for (let i = 0; i < blips.length; i++) {
-                    blips[i].id = '' + id++;
+                    blips[i].id = '' + blipId++;
                 }
             }
         }
@@ -234,7 +240,7 @@ export default class Radar {
     }
 
     private drawRings(grid: svg): void {
-        for (let i = 0; i < this.config.rings.length; i++) {
+        for (let i = 0; i < this.ringsCount; i++) {
             grid.append('circle')
                 .attr('cx', 0)
                 .attr('cy', 0)
@@ -278,7 +284,7 @@ export default class Radar {
     private drawLegend(radar: svg): void {
         const legend = radar.append('g');
 
-        for (let quadrant = 0; quadrant < 4; quadrant++) {
+        for (let quadrant = 0; quadrant < this.quadrantsCount; quadrant++) {
             legend
                 .append('text')
                 .attr('transform', Radar.transform(
@@ -289,7 +295,7 @@ export default class Radar {
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '18');
 
-            for (let ring = 0; ring < 4; ring++) {
+            for (let ring = 0; ring < this.ringsCount; ring++) {
                 legend
                     .append('text')
                     .attr('transform', this.legendTransform(quadrant, ring))
