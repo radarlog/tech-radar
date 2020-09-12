@@ -1,12 +1,12 @@
 import * as d3 from 'd3';
 import { Selection } from 'd3';
-import { blip, cartesian, entry, polar, quadrantId, ringId, segment } from './types';
+import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment } from './types';
 
 export default class Radar {
-    private readonly segmented: any[quadrantId][ringId][];
+    private readonly segmentedBlips: blip[][][];
 
-    constructor(private readonly config: any) {
-        this.segmented = this.createSegmented();
+    constructor(private readonly config: config) {
+        this.segmentedBlips = this.createSegmentedBlips();
     }
 
     render(svg: HTMLElement): void {
@@ -126,8 +126,28 @@ export default class Radar {
         };
     }
 
-    private createSegmented(): any[quadrantId][ringId][] {
-        let segmented: any[quadrantId][ringId][] = new Array(4);
+    private entryToBlip(entry: entry): blip {
+        const segmented = this.segment(entry.quadrant, entry.ring);
+        const point = segmented.random();
+
+        return {
+            id: '',
+            quadrant: entry.quadrant,
+            ring: entry.ring,
+            label: entry.label,
+            active: entry.active,
+            moved: entry.moved,
+            segment: segmented,
+            x: point.x,
+            y: point.y,
+            color: entry.active
+                ? this.config.rings[entry.ring].color
+                : this.config.colors.inactive
+        }
+    }
+
+    private createSegmentedBlips(): blip[][][] {
+        let segmented: blip[][][] = new Array(4);
 
         // partition blips according to segments
         for (let quadrant = 0; quadrant < 4; quadrant++) {
@@ -141,15 +161,7 @@ export default class Radar {
         // position each blip randomly in its segment
         let blip: blip;
         for (let i = 0; i < this.config.entries.length; i++) {
-            blip = this.config.entries[i];
-            blip.segment = this.segment(blip.quadrant, blip.ring);
-
-            const point = blip.segment.random();
-            blip.x = point.x;
-            blip.y = point.y;
-            blip.color = blip.active
-                ? this.config.rings[blip.ring].color
-                : this.config.colors.inactive;
+            blip = this.entryToBlip(this.config.entries[i]);
 
             segmented[blip.quadrant][blip.ring].push(blip);
         }
@@ -160,7 +172,7 @@ export default class Radar {
             for (let ring = 0; ring < 4; ring++) {
                 const blips = segmented[quadrant][ring];
 
-                blips.sort((a: entry, b: entry) => a.label.localeCompare(b.label));
+                blips.sort((a: blip, b: blip) => a.label.localeCompare(b.label));
 
                 for (let i = 0; i < blips.length; i++) {
                     blips[i].id = '' + id++;
@@ -270,7 +282,7 @@ export default class Radar {
 
                 legend
                     .selectAll('.legend' + quadrant + ring)
-                    .data(this.segmented[quadrant][ring])
+                    .data(this.segmentedBlips[quadrant][ring])
                     .enter()
                     .append('text')
                     .attr('transform', (d: blip, i: number) => this.legendTransform(quadrant, ring, i))
@@ -320,7 +332,7 @@ export default class Radar {
         // draw blips on radar
         const blips = rink
             .selectAll('.blip')
-            .data(this.config.entries)
+            .data(this.segmentedBlips.flat(3))
             .enter()
             .append('g')
             .attr('class', 'blip')
@@ -366,7 +378,7 @@ export default class Radar {
 
         // distribute blips, while avoiding collisions
         d3.forceSimulation()
-            .nodes(this.config.entries)
+            .nodes(this.segmentedBlips.flat(3))
             .velocityDecay(0.19) // magic number (found by experimentation)
             .force('collision', d3.forceCollide().radius(12).strength(0.85))
             .on('tick', () => Radar.ticked(blips));
@@ -382,7 +394,7 @@ export default class Radar {
         let dy = index == null ? -16 : index * 12;
 
         if (ring % 2 === 1) {
-            dy = dy + 36 + this.segmented[quadrant][ring - 1].length * 12;
+            dy = dy + 36 + this.segmentedBlips[quadrant][ring - 1].length * 12;
         }
 
         return Radar.transform(

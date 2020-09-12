@@ -11,7 +11,8 @@
         "resolveJsonModule": true,
         "sourceMap": true,
         "strict": true,
-        "strictFunctionTypes": false
+        "strictFunctionTypes": false,
+        "target": "ES2019"
     },
     "include": [
         "src/**/*.ts"
