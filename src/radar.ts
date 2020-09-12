@@ -73,25 +73,25 @@ export default class Radar {
         };
     }
 
-    private segment(quadrant: quadrantId, ring: ringId): segment {
+    private segment(quadrantId: quadrantId, ringId: ringId): segment {
         const polarMin: polar = {
-            t: this.config.quadrants[quadrant].radial_min * Math.PI,
-            r: ring === 0 ? 30 : this.config.rings[ring - 1].radius,
+            t: this.config.quadrants[quadrantId].radial_min * Math.PI,
+            r: ringId === 0 ? 30 : this.config.rings[ringId - 1].radius,
         };
 
         const polarMax: polar = {
-            t: this.config.quadrants[quadrant].radial_max * Math.PI,
-            r: this.config.rings[ring].radius,
+            t: this.config.quadrants[quadrantId].radial_max * Math.PI,
+            r: this.config.rings[ringId].radius,
         };
 
         const cartesianMin: cartesian = {
-            x: 15 * this.config.quadrants[quadrant].factor_x,
-            y: 15 * this.config.quadrants[quadrant].factor_y,
+            x: 15 * this.config.quadrants[quadrantId].factor_x,
+            y: 15 * this.config.quadrants[quadrantId].factor_y,
         };
 
         const cartesianMax: cartesian = {
-            x: this.config.rings[3].radius * this.config.quadrants[quadrant].factor_x,
-            y: this.config.rings[3].radius * this.config.quadrants[quadrant].factor_y,
+            x: this.config.rings[3].radius * this.config.quadrants[quadrantId].factor_x,
+            y: this.config.rings[3].radius * this.config.quadrants[quadrantId].factor_y,
         };
 
         return {
@@ -125,13 +125,13 @@ export default class Radar {
     }
 
     private entryToBlip(entry: entry): blip {
-        const segmented = this.segment(entry.quadrant, entry.ring);
+        const segmented = this.segment(entry.quadrantId, entry.ringId);
         const point = segmented.random();
 
         return {
             id: '',
-            quadrant: entry.quadrant,
-            ring: entry.ring,
+            quadrantId: entry.quadrantId,
+            ringId: entry.ringId,
             label: entry.label,
             active: entry.active,
             moved: entry.moved,
@@ -139,7 +139,7 @@ export default class Radar {
             x: point.x,
             y: point.y,
             color: entry.active
-                ? this.config.rings[entry.ring].color
+                ? this.config.rings[entry.ringId].color
                 : this.config.colors.inactive
         }
     }
@@ -161,7 +161,7 @@ export default class Radar {
         for (let i = 0; i < this.config.entries.length; i++) {
             blip = this.entryToBlip(this.config.entries[i]);
 
-            segmented[blip.quadrant][blip.ring].push(blip);
+            segmented[blip.quadrantId][blip.ringId].push(blip);
         }
 
         // assign unique sequential id to each blip
@@ -334,7 +334,7 @@ export default class Radar {
             .enter()
             .append('g')
             .attr('class', 'blip')
-            .attr('transform', (d: blip, i: number) => this.legendTransform(d.quadrant, d.ring, i))
+            .attr('transform', (d: blip, i: number) => this.legendTransform(d.quadrantId, d.ringId, i))
             .on('mouseover', (d: blip) => {
                 Radar.showBubble(d);
                 Radar.highlightLegendItem(d);

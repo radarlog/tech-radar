@@ -39,8 +39,8 @@ export type ring = {
 };
 
 export type entry = {
-    quadrant: quadrantId;
-    ring: ringId;
+    quadrantId: quadrantId;
+    ringId: ringId;
     label: string;
     active: boolean;
     moved: number;
