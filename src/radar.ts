@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { Selection } from 'd3';
-import { blip, cartesian, entity, polar, quadrantId, ringId, segment } from './types';
+import { blip, cartesian, entry, polar, quadrantId, ringId, segment } from './types';
 
 export default class Radar {
     private readonly segmented: any[quadrantId][ringId][];
@@ -160,7 +160,7 @@ export default class Radar {
             for (let ring = 0; ring < 4; ring++) {
                 const blips = segmented[quadrant][ring];
 
-                blips.sort((a: entity, b: entity) => a.label.localeCompare(b.label));
+                blips.sort((a: entry, b: entry) => a.label.localeCompare(b.label));
 
                 for (let i = 0; i < blips.length; i++) {
                     blips[i].id = '' + id++;

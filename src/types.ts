@@ -6,7 +6,7 @@ export type config = {
     title: string;
     quadrants: quadrant[];
     rings: ring[];
-    entries: entity[];
+    entries: entry[];
     title_offset: cartesian;
     footer_offset: cartesian;
 }
@@ -38,7 +38,7 @@ export type ring = {
     color: string;
 }
 
-export type entity = {
+export type entry = {
     quadrant: quadrantId;
     ring: ringId;
     label: string;
@@ -62,7 +62,7 @@ export type segment = {
     random: () => cartesian;
 }
 
-export type blip = entity & {
+export type blip = entry & {
     id: string;
     segment: segment;
     x: number;
