@@ -4,9 +4,9 @@ module.exports = {
         es6: true
     },
     extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
-        'prettier',
-        'prettier/@typescript-eslint'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -16,10 +16,8 @@ module.exports = {
     },
     plugins: [
         '@typescript-eslint',
-        'prettier'
     ],
     rules: {
         quotes: ['error', 'single', {allowTemplateLiterals: true}],
-        'prettier/prettier': ['error', {singleQuote: true}]
     }
 };
