@@ -145,7 +145,7 @@ export default class Radar {
     }
 
     private createSegmentedBlips(): blip[][][] {
-        let segmented: blip[][][] = new Array(4);
+        const segmented: blip[][][] = new Array(4);
 
         // partition blips according to segments
         for (let quadrant = 0; quadrant < 4; quadrant++) {
@@ -166,7 +166,7 @@ export default class Radar {
 
         // assign unique sequential id to each blip
         let id = 1;
-        for (let quadrant of [2, 3, 1, 0]) {
+        for (const quadrant of [2, 3, 1, 0]) {
             for (let ring = 0; ring < 4; ring++) {
                 const blips = segmented[quadrant][ring];
 
@@ -185,7 +185,7 @@ export default class Radar {
         return 'translate(' + x + ',' + y + ')';
     }
 
-    private draw(radar: Selection<SVGGElement, unknown, HTMLElement, any>) {
+    private draw(radar: Selection<SVGGElement, unknown, HTMLElement, string>) {
         const grid = radar.append('g');
 
         // draw grid lines
@@ -346,7 +346,7 @@ export default class Radar {
 
         // this.configure each blip
         blips.each(function (d: blip) {
-            let blip = select(this);
+            const blip = select(this);
 
             // blip shape
             if (d.moved > 0) {
@@ -387,8 +387,8 @@ export default class Radar {
         blips.attr('transform', (d: blip) => Radar.transform(d.segment.clipx(d), d.segment.clipy(d)));
     }
 
-    private legendTransform(quadrant: quadrantId, ring: ringId, index: number | null = null) {
-        let dx = ring < 2 ? 0 : 120;
+    private legendTransform(quadrant: quadrantId, ring: ringId, index?: number) {
+        const dx = ring < 2 ? 0 : 120;
         let dy = index == null ? -16 : index * 12;
 
         if (ring % 2 === 1) {

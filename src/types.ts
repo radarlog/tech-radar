@@ -9,13 +9,13 @@ export type config = {
     entries: entry[];
     title_offset: cartesian;
     footer_offset: cartesian;
-}
+};
 
 export type colors = {
     background: string;
     grid: string;
     inactive: string;
-}
+};
 
 export type quadrantId = number;
 
@@ -26,8 +26,8 @@ export type quadrant = {
     radial_max: number; // is multiples of PI
     factor_x: number;
     factor_y: number;
-    legend_offset: cartesian
-}
+    legend_offset: cartesian;
+};
 
 export type ringId = number;
 
@@ -36,7 +36,7 @@ export type ring = {
     radius: number;
     name: string;
     color: string;
-}
+};
 
 export type entry = {
     quadrant: quadrantId;
@@ -44,23 +44,23 @@ export type entry = {
     label: string;
     active: boolean;
     moved: number;
-}
+};
 
 export type cartesian = {
     x: number;
     y: number;
-}
+};
 
 export type polar = {
     t: number;
     r: number;
-}
+};
 
 export type segment = {
     clipx: (d: cartesian) => number;
     clipy: (d: cartesian) => number;
     random: () => cartesian;
-}
+};
 
 export type blip = entry & {
     id: string;
@@ -68,4 +68,4 @@ export type blip = entry & {
     x: number;
     y: number;
     color: string;
-}
+};
