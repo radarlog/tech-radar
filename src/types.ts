@@ -7,8 +7,8 @@ export type config = {
     quadrants: quadrant[];
     rings: ring[];
     entries: entry[];
-    title_offset: cartesian;
-    footer_offset: cartesian;
+    titleOffset: cartesian;
+    footerOffset: cartesian;
 };
 
 export type colors = {
@@ -22,11 +22,11 @@ export type quadrantId = number;
 export type quadrant = {
     id: quadrantId;
     name: string;
-    radial_min: number; // is multiples of PI
-    radial_max: number; // is multiples of PI
-    factor_x: number;
-    factor_y: number;
-    legend_offset: cartesian;
+    radialMin: number; // is multiples of PI
+    radialMax: number; // is multiples of PI
+    factorX: number;
+    factorY: number;
+    legendOffset: cartesian;
 };
 
 export type ringId = number;

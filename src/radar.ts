@@ -75,23 +75,23 @@ export default class Radar {
 
     private segment(quadrantId: quadrantId, ringId: ringId): segment {
         const polarMin: polar = {
-            t: this.config.quadrants[quadrantId].radial_min * Math.PI,
+            t: this.config.quadrants[quadrantId].radialMin * Math.PI,
             r: ringId === 0 ? 30 : this.config.rings[ringId - 1].radius,
         };
 
         const polarMax: polar = {
-            t: this.config.quadrants[quadrantId].radial_max * Math.PI,
+            t: this.config.quadrants[quadrantId].radialMax * Math.PI,
             r: this.config.rings[ringId].radius,
         };
 
         const cartesianMin: cartesian = {
-            x: 15 * this.config.quadrants[quadrantId].factor_x,
-            y: 15 * this.config.quadrants[quadrantId].factor_y,
+            x: 15 * this.config.quadrants[quadrantId].factorX,
+            y: 15 * this.config.quadrants[quadrantId].factorY,
         };
 
         const cartesianMax: cartesian = {
-            x: this.config.rings[3].radius * this.config.quadrants[quadrantId].factor_x,
-            y: this.config.rings[3].radius * this.config.quadrants[quadrantId].factor_y,
+            x: this.config.rings[3].radius * this.config.quadrants[quadrantId].factorX,
+            y: this.config.rings[3].radius * this.config.quadrants[quadrantId].factorY,
         };
 
         return {
@@ -242,7 +242,7 @@ export default class Radar {
         // draw title
         radar
             .append('text')
-            .attr('transform', Radar.transform(this.config.title_offset.x, this.config.title_offset.y))
+            .attr('transform', Radar.transform(this.config.titleOffset.x, this.config.titleOffset.y))
             .text(this.config.title)
             .style('font-family', 'Arial, Helvetica')
             .style('font-size', '34');
@@ -250,7 +250,7 @@ export default class Radar {
         // draw footer
         radar
             .append('text')
-            .attr('transform', Radar.transform(this.config.footer_offset.x, this.config.footer_offset.y))
+            .attr('transform', Radar.transform(this.config.footerOffset.x, this.config.footerOffset.y))
             .text('▲ moved up     ▼ moved down')
             .attr('xml:space', 'preserve')
             .style('font-family', 'Arial, Helvetica')
@@ -262,8 +262,8 @@ export default class Radar {
             legend
                 .append('text')
                 .attr('transform', Radar.transform(
-                    this.config.quadrants[quadrant].legend_offset.x,
-                    this.config.quadrants[quadrant].legend_offset.y - 45
+                    this.config.quadrants[quadrant].legendOffset.x,
+                    this.config.quadrants[quadrant].legendOffset.y - 45
                 ))
                 .text(this.config.quadrants[quadrant].name)
                 .style('font-family', 'Arial, Helvetica')
@@ -396,8 +396,8 @@ export default class Radar {
         }
 
         return Radar.transform(
-            this.config.quadrants[quadrant].legend_offset.x + dx,
-            this.config.quadrants[quadrant].legend_offset.y + dy
+            this.config.quadrants[quadrant].legendOffset.x + dx,
+            this.config.quadrants[quadrant].legendOffset.y + dy
         );
     }
 
