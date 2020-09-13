@@ -414,7 +414,7 @@ export default class Radar {
             )));
     }
 
-    private legendTransform(quadrant: quadrantId, ringId: ringId, index?: number) {
+    private legendTransform(quadrant: quadrantId, ringId: ringId, index?: number): string {
         const ringIndex = ringIds.indexOf(ringId);
 
         const dx = ringIndex < 2 ? 0 : 120;
