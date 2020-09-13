@@ -51,13 +51,13 @@ const config: config = {
             legendOffset: { x: 450, y: -310 },
         },
     ],
-    rings: [
-        { id: 1, radius: 130, name: 'ADOPT', color: '#93c47d' },
-        { id: 2, radius: 220, name: 'TRIAL', color: '#93d2c2' },
-        { id: 3, radius: 310, name: 'ASSESS', color: '#fbdb84' },
-        { id: 4, radius: 400, name: 'HOLD', color: '#efafa9' },
-    ],
+    rings: {
+        adopt: { radius: 130, color: '#93c47d', name: 'ADOPT' },
+        trial: { radius: 220, color: '#93d2c2', name: 'TRIAL' },
+        assess: { radius: 310, color: '#fbdb84', name: 'ASSESS' },
+        hold: { radius: 400, color: '#efafa9', name: 'HOLD' },
+    },
     entries: entries,
 };
 
-export default config;
+export default config

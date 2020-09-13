@@ -7,7 +7,7 @@ export type config = Readonly<{
     colors: colors;
     title: string;
     quadrants: quadrant[];
-    rings: ring[];
+    rings: Record<ringId, ring>;
     entries: entry[];
     titleOffset: cartesian;
     footerOffset: cartesian;
@@ -31,10 +31,11 @@ export type quadrant = {
     legendOffset: cartesian;
 };
 
-export type ringId = number;
+export const ringIds = ['adopt', 'trial', 'assess', 'hold'];
+
+export type ringId = typeof ringIds[number];
 
 export type ring = {
-    id: ringId;
     radius: number;
     name: string;
     color: string;
@@ -72,4 +73,4 @@ export type blip = entry & {
     color: string;
 };
 
-export type svg = Selection<SVGGElement, unknown, HTMLElement, string>;
+export type svg = Selection<SVGGElement, unknown, HTMLElement, blip>;
