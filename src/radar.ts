@@ -159,32 +159,16 @@ export default class Radar {
     }
 
     private createSegmentedBlips(): Record<quadrantId, Record<ringId, blip[]>> {
-        const segmented: Record<quadrantId, Record<ringId, blip[]>> = {
-            Languages: {
-                adopt: [],
-                trial: [],
-                assess: [],
-                hold: [],
-            },
-            Infrastructure: {
-                adopt: [],
-                trial: [],
-                assess: [],
-                hold: [],
-            },
-            Frameworks: {
-                adopt: [],
-                trial: [],
-                assess: [],
-                hold: [],
-            },
-            DataManagement: {
-                adopt: [],
-                trial: [],
-                assess: [],
-                hold: [],
+        const segmented: Record<quadrantId, Record<ringId, blip[]>> = {};
+
+        // partition blips according to segments
+        for (const quadrantId of quadrantIds) {
+            segmented[quadrantId] = {};
+
+            for (const ringId of ringIds) {
+                segmented[quadrantId][ringId] = [];
             }
-        };
+        }
 
         // position each blip randomly in its segment
         let blip: blip;
