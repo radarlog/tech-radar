@@ -19,7 +19,7 @@ export type colors = {
     inactive: string;
 };
 
-export const quadrantIds = ['Frameworks', 'DataManagement', 'Infrastructure', 'Languages'];
+export const quadrantIds = (<T extends string[]>(...o: T) => o)('Frameworks', 'DataManagement', 'Infrastructure', 'Languages');
 
 export type quadrantId = typeof quadrantIds[number];
 
@@ -31,7 +31,7 @@ export type quadrant = {
     legendOffset: cartesian;
 };
 
-export const ringIds = ['adopt', 'trial', 'assess', 'hold'];
+export const ringIds = (<T extends string[]>(...o: T) => o)('adopt', 'trial', 'assess', 'hold');
 
 export type ringId = typeof ringIds[number];
 

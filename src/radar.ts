@@ -159,7 +159,7 @@ export default class Radar {
     }
 
     private createSegmentedBlips(): Record<quadrantId, Record<ringId, blip[]>> {
-        const segmented: Record<quadrantId, Record<ringId, blip[]>> = {};
+        const segmented: Record<string, Record<string, blip[]>> = {};
 
         // partition blips according to segments
         for (const quadrantId of quadrantIds) {
