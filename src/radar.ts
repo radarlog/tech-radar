@@ -307,7 +307,7 @@ export default class Radar {
                     this.config.quadrants[quadrantId].legendOffset.x,
                     this.config.quadrants[quadrantId].legendOffset.y - 45
                 ))
-                .text(this.config.quadrants[quadrantId].name)
+                .text(quadrantId.replace(/([a-z])([A-Z])/g, '$1 $2'))
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '18');
 

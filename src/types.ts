@@ -24,7 +24,6 @@ export const quadrantIds = ['Frameworks', 'DataManagement', 'Infrastructure', 'L
 export type quadrantId = typeof quadrantIds[number];
 
 export type quadrant = {
-    name: string;
     radialMin: number; // is multiples of PI
     radialMax: number; // is multiples of PI
     factorX: number;

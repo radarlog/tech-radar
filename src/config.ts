@@ -15,7 +15,6 @@ const config: config = {
     footerOffset: { x: -675, y: 420 },
     quadrants: {
         Languages: {
-            name: 'Languages',
             radialMin: 0,
             radialMax: 0.5,
             factorX: 1,
@@ -23,7 +22,6 @@ const config: config = {
             legendOffset: { x: 450, y: 90 },
         },
         Infrastructure: {
-            name: 'Infrastructure',
             radialMin: 0.5,
             radialMax: 1,
             factorX: -1,
@@ -31,7 +29,6 @@ const config: config = {
             legendOffset: { x: -675, y: 90 },
         },
         Frameworks: {
-            name: 'Frameworks',
             radialMin: -1,
             radialMax: -0.5,
             factorX: -1,
@@ -39,7 +36,6 @@ const config: config = {
             legendOffset: { x: -675, y: -310 },
         },
         DataManagement: {
-            name: 'Data Management',
             radialMin: -0.5,
             radialMax: 0,
             factorX: 1,
