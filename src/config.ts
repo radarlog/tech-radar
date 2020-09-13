@@ -13,9 +13,8 @@ const config: config = {
     title: 'Tech Radar',
     titleOffset: { x: -675, y: -420 },
     footerOffset: { x: -675, y: 420 },
-    quadrants: [
-        {
-            id: 1,
+    quadrants: {
+        Languages: {
             name: 'Languages',
             radialMin: 0,
             radialMax: 0.5,
@@ -23,8 +22,7 @@ const config: config = {
             factorY: 1,
             legendOffset: { x: 450, y: 90 },
         },
-        {
-            id: 2,
+        Infrastructure: {
             name: 'Infrastructure',
             radialMin: 0.5,
             radialMax: 1,
@@ -32,8 +30,7 @@ const config: config = {
             factorY: 1,
             legendOffset: { x: -675, y: 90 },
         },
-        {
-            id: 3,
+        Frameworks: {
             name: 'Frameworks',
             radialMin: -1,
             radialMax: -0.5,
@@ -41,8 +38,7 @@ const config: config = {
             factorY: -1,
             legendOffset: { x: -675, y: -310 },
         },
-        {
-            id: 4,
+        DataManagement: {
             name: 'Data Management',
             radialMin: -0.5,
             radialMax: 0,
@@ -50,7 +46,7 @@ const config: config = {
             factorY: -1,
             legendOffset: { x: 450, y: -310 },
         },
-    ],
+    },
     rings: {
         adopt: { radius: 130, color: '#93c47d' },
         trial: { radius: 220, color: '#93d2c2' },

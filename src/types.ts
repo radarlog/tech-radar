@@ -6,7 +6,7 @@ export type config = Readonly<{
     height: number;
     colors: colors;
     title: string;
-    quadrants: quadrant[];
+    quadrants: Record<quadrantId, quadrant>;
     rings: Record<ringId, ring>;
     entries: entry[];
     titleOffset: cartesian;
@@ -19,10 +19,11 @@ export type colors = {
     inactive: string;
 };
 
-export type quadrantId = number;
+export const quadrantIds = ['Frameworks', 'DataManagement', 'Infrastructure', 'Languages'];
+
+export type quadrantId = typeof quadrantIds[number];
 
 export type quadrant = {
-    id: quadrantId;
     name: string;
     radialMin: number; // is multiples of PI
     radialMax: number; // is multiples of PI

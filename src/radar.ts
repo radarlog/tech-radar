@@ -1,19 +1,15 @@
 import { forceCollide, forceSimulation, select } from 'd3';
-import { blip, cartesian, config, entry, polar, quadrantId, ringId, ringIds, segment, svg } from './types';
+import { blip, cartesian, config, entry, polar, quadrantId, quadrantIds, ringId, ringIds, segment, svg } from './types';
 
 export default class Radar {
     private seed: number;
 
-    private readonly quadrantsCount: number;
-
-    private readonly segmentedBlips: Record<ringId, blip[]>[];
+    private readonly segmentedBlips: Record<quadrantId, Record<ringId, blip[]>>;
 
     private blips: blip[] = [];
 
     constructor(private readonly config: config) {
         this.seed = config.seed;
-
-        this.quadrantsCount = config.quadrants.length;
 
         this.segmentedBlips = this.createSegmentedBlips();
     }
@@ -162,19 +158,33 @@ export default class Radar {
         }
     }
 
-    private createSegmentedBlips(): Record<ringId, blip[]>[] {
-        const segmented: Record<ringId, blip[]>[] = [];
-
-        // partition blips according to segments
-        for (let quadrant = 0; quadrant < this.quadrantsCount; quadrant++) {
-            // TODO: build programmatically
-            segmented[quadrant] = {
-                'adopt': [],
-                'trial': [],
-                'assess': [],
-                'hold': [],
-            };
-        }
+    private createSegmentedBlips(): Record<quadrantId, Record<ringId, blip[]>> {
+        const segmented: Record<quadrantId, Record<ringId, blip[]>> = {
+            Languages: {
+                adopt: [],
+                trial: [],
+                assess: [],
+                hold: [],
+            },
+            Infrastructure: {
+                adopt: [],
+                trial: [],
+                assess: [],
+                hold: [],
+            },
+            Frameworks: {
+                adopt: [],
+                trial: [],
+                assess: [],
+                hold: [],
+            },
+            DataManagement: {
+                adopt: [],
+                trial: [],
+                assess: [],
+                hold: [],
+            }
+        };
 
         // position each blip randomly in its segment
         let blip: blip;
@@ -186,9 +196,9 @@ export default class Radar {
 
         // assign unique sequential id to each blip
         let blipId = 1;
-        for (const quadrant of [2, 3, 1, 0]) {
+        for (const quadrantId of quadrantIds) {
             for (const ringId of ringIds) {
-                const blips = segmented[quadrant][ringId];
+                const blips = segmented[quadrantId][ringId];
 
                 blips.sort((a: blip, b: blip) => a.label.localeCompare(b.label));
 
@@ -290,35 +300,33 @@ export default class Radar {
     private drawLegend(radar: svg): void {
         const legend = radar.append('g');
 
-        for (let quadrant = 0; quadrant < this.quadrantsCount; quadrant++) {
+        for (const quadrantId of quadrantIds) {
             legend
                 .append('text')
                 .attr('transform', Radar.transform(
-                    this.config.quadrants[quadrant].legendOffset.x,
-                    this.config.quadrants[quadrant].legendOffset.y - 45
+                    this.config.quadrants[quadrantId].legendOffset.x,
+                    this.config.quadrants[quadrantId].legendOffset.y - 45
                 ))
-                .text(this.config.quadrants[quadrant].name)
+                .text(this.config.quadrants[quadrantId].name)
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '18');
 
             for (const ringId of ringIds) {
                 legend
                     .append('text')
-                    .attr('transform', this.legendTransform(quadrant, ringId))
+                    .attr('transform', this.legendTransform(quadrantId, ringId))
                     .text(ringId.toUpperCase())
                     .style('font-family', 'Arial, Helvetica')
                     .style('font-size', '12')
                     .style('font-weight', 'bold');
 
-                const ringIndex = ringIds.indexOf(ringId);
-
                 legend
-                    .selectAll('.legend' + quadrant + ringIndex)
-                    .data(this.segmentedBlips[quadrant][ringId])
+                    .selectAll('.legend' + quadrantId + ringId)
+                    .data(this.segmentedBlips[quadrantId][ringId])
                     .enter()
                     .append('text')
-                    .attr('transform', (d: blip, i: number) => this.legendTransform(quadrant, ringId, i))
-                    .attr('class', 'legend' + quadrant + ringIndex)
+                    .attr('transform', (d: blip, i: number) => this.legendTransform(quadrantId, ringId, i))
+                    .attr('class', 'legend' + quadrantId + ringId)
                     .attr('id', (d: blip) => 'legendItem' + d.id)
                     .text((d: blip) => d.id + '. ' + d.label)
                     .style('font-family', 'Arial, Helvetica')
