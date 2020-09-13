@@ -209,18 +209,24 @@ export default class Radar {
     }
 
     private drawLines(grid: svg): void {
+        let maxRadius = 0;
+
+        for (const ringId of ringIds) {
+            maxRadius = Math.max(maxRadius, this.config.rings[ringId].radius)
+        }
+
         grid.append('line')
             .attr('x1', 0)
-            .attr('y1', -400)
+            .attr('y1', -maxRadius)
             .attr('x2', 0)
-            .attr('y2', 400)
+            .attr('y2', maxRadius)
             .style('stroke', this.config.colors.grid)
             .style('stroke-width', 1);
 
         grid.append('line')
-            .attr('x1', -400)
+            .attr('x1', -maxRadius)
             .attr('y1', 0)
-            .attr('x2', 400)
+            .attr('x2', maxRadius)
             .attr('y2', 0)
             .style('stroke', this.config.colors.grid)
             .style('stroke-width', 1);
