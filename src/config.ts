@@ -52,10 +52,10 @@ const config: config = {
         },
     ],
     rings: {
-        adopt: { radius: 130, color: '#93c47d', name: 'ADOPT' },
-        trial: { radius: 220, color: '#93d2c2', name: 'TRIAL' },
-        assess: { radius: 310, color: '#fbdb84', name: 'ASSESS' },
-        hold: { radius: 400, color: '#efafa9', name: 'HOLD' },
+        adopt: { radius: 130, color: '#93c47d' },
+        trial: { radius: 220, color: '#93d2c2' },
+        assess: { radius: 310, color: '#fbdb84' },
+        hold: { radius: 400, color: '#efafa9' },
     },
     entries: entries,
 };

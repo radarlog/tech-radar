@@ -256,7 +256,7 @@ export default class Radar {
                 .style('stroke-width', 1);
 
             grid.append('text')
-                .text(this.config.rings[ringId].name)
+                .text(ringId.toUpperCase())
                 .attr('y', -this.config.rings[ringId].radius + 62)
                 .attr('text-anchor', 'middle')
                 .style('fill', '#e5e5e5')
@@ -305,7 +305,7 @@ export default class Radar {
                 legend
                     .append('text')
                     .attr('transform', this.legendTransform(quadrant, ringId))
-                    .text(this.config.rings[ringId].name)
+                    .text(ringId.toUpperCase())
                     .style('font-family', 'Arial, Helvetica')
                     .style('font-size', '12')
                     .style('font-weight', 'bold');

@@ -37,7 +37,6 @@ export type ringId = typeof ringIds[number];
 
 export type ring = {
     radius: number;
-    name: string;
     color: string;
 };
 
