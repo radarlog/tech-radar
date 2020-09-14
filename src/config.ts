@@ -14,20 +14,6 @@ const config: config = {
     titleOffset: { x: -675, y: -420 },
     footerOffset: { x: -675, y: 420 },
     quadrants: {
-        Languages: {
-            radialMin: 0,
-            radialMax: 0.5,
-            factorX: 1,
-            factorY: 1,
-            legendOffset: { x: 450, y: 90 },
-        },
-        Infrastructure: {
-            radialMin: 0.5,
-            radialMax: 1,
-            factorX: -1,
-            factorY: 1,
-            legendOffset: { x: -675, y: 90 },
-        },
         Frameworks: {
             radialMin: -1,
             radialMax: -0.5,
@@ -41,6 +27,20 @@ const config: config = {
             factorX: 1,
             factorY: -1,
             legendOffset: { x: 450, y: -310 },
+        },
+        Infrastructure: {
+            radialMin: 0.5,
+            radialMax: 1,
+            factorX: -1,
+            factorY: 1,
+            legendOffset: { x: -675, y: 90 },
+        },
+        Languages: {
+            radialMin: 0,
+            radialMax: 0.5,
+            factorX: 1,
+            factorY: 1,
+            legendOffset: { x: 450, y: 90 },
         },
     },
     rings: {
