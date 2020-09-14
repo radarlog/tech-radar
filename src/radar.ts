@@ -1,5 +1,5 @@
 import { forceCollide, forceSimulation, select } from 'd3';
-import { blip, cartesian, config, entry, polar, quadrantId, quadrantIds, ringId, segment, svg } from './types';
+import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment, svg } from './types';
 
 export default class Radar {
     private seed: number;
@@ -168,7 +168,7 @@ export default class Radar {
         const segmented: Record<string, Record<string, blip[]>> = {};
 
         // partition blips according to segments
-        for (const quadrantId of quadrantIds) {
+        for (const quadrantId of Object.keys(this.config.quadrants) as quadrantId[]) {
             segmented[quadrantId] = {};
 
             for (const ringId of Object.keys(this.config.rings) as ringId[]) {
@@ -186,7 +186,7 @@ export default class Radar {
 
         // assign unique sequential id to each blip
         let blipId = 1;
-        for (const quadrantId of quadrantIds) {
+        for (const quadrantId of Object.keys(this.config.quadrants) as quadrantId[]) {
             for (const ringId of Object.keys(this.config.rings) as ringId[]) {
                 const blips = segmented[quadrantId][ringId];
 
@@ -296,7 +296,7 @@ export default class Radar {
     private drawLegend(radar: svg): void {
         const legend = radar.append('g');
 
-        for (const quadrantId of quadrantIds) {
+        for (const quadrantId of Object.keys(this.config.quadrants) as quadrantId[]) {
             legend
                 .append('text')
                 .attr('transform', Radar.transform(

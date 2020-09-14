@@ -19,9 +19,12 @@ export type colors = {
     inactive: string;
 };
 
-export const quadrantIds = (<T extends string[]>(...o: T) => o)('Frameworks', 'DataManagement', 'Infrastructure', 'Languages');
-
-export type quadrantId = typeof quadrantIds[number];
+export enum quadrantId {
+    FRAMEWORKS = 'Frameworks',
+    DATA_MANAGEMENT = 'DataManagement',
+    INFRASTRUCTURE = 'Infrastructure',
+    LANGUAGES = 'Languages',
+}
 
 export type quadrant = {
     radialMin: number; // is multiples of PI
