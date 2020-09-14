@@ -1,5 +1,5 @@
 import { forceCollide, forceSimulation, select } from 'd3';
-import { blip, cartesian, config, entry, polar, quadrantId, quadrantIds, ringId, ringIds, segment, svg } from './types';
+import { blip, cartesian, config, entry, polar, quadrantId, quadrantIds, ringId, segment, svg } from './types';
 
 export default class Radar {
     private seed: number;
@@ -8,8 +8,14 @@ export default class Radar {
 
     private blips: blip[] = [];
 
+    private ringIds: ringId[] = [];
+
     constructor(private readonly config: config) {
         this.seed = config.seed;
+
+        this.ringIds = (Object.keys(this.config.rings) as ringId[]).sort((a, b) => {
+            return this.config.rings[a].radius - this.config.rings[b].radius
+        });
 
         this.segmentedBlips = this.createSegmentedBlips();
     }
@@ -86,11 +92,11 @@ export default class Radar {
     }
 
     private segment(quadrantId: quadrantId, ringId: ringId): segment {
-        const ringIndex = ringIds.indexOf(ringId);
+        const ringIndex = this.ringIds.indexOf(ringId);
 
         const polarMin: polar = {
             t: this.config.quadrants[quadrantId].radialMin * Math.PI,
-            r: ringIndex === 0 ? 30 : this.config.rings[ringIds[ringIndex - 1]].radius,
+            r: ringIndex === 0 ? 30 : this.config.rings[this.ringIds[ringIndex - 1]].radius,
         };
 
         const polarMax: polar = {
@@ -104,8 +110,8 @@ export default class Radar {
         };
 
         const cartesianMax: cartesian = {
-            x: this.config.rings[ringIds[ringIds.length - 1]].radius * this.config.quadrants[quadrantId].factorX,
-            y: this.config.rings[ringIds[ringIds.length - 1]].radius * this.config.quadrants[quadrantId].factorY,
+            x: this.config.rings[this.ringIds[this.ringIds.length - 1]].radius * this.config.quadrants[quadrantId].factorX,
+            y: this.config.rings[this.ringIds[this.ringIds.length - 1]].radius * this.config.quadrants[quadrantId].factorY,
         };
 
         return {
@@ -165,7 +171,7 @@ export default class Radar {
         for (const quadrantId of quadrantIds) {
             segmented[quadrantId] = {};
 
-            for (const ringId of ringIds) {
+            for (const ringId of Object.keys(this.config.rings) as ringId[]) {
                 segmented[quadrantId][ringId] = [];
             }
         }
@@ -181,7 +187,7 @@ export default class Radar {
         // assign unique sequential id to each blip
         let blipId = 1;
         for (const quadrantId of quadrantIds) {
-            for (const ringId of ringIds) {
+            for (const ringId of Object.keys(this.config.rings) as ringId[]) {
                 const blips = segmented[quadrantId][ringId];
 
                 blips.sort((a: blip, b: blip) => a.label.localeCompare(b.label));
@@ -211,7 +217,7 @@ export default class Radar {
     private drawLines(grid: svg): void {
         let maxRadius = 0;
 
-        for (const ringId of ringIds) {
+        for (const ringId of Object.keys(this.config.rings) as ringId[]) {
             maxRadius = Math.max(maxRadius, this.config.rings[ringId].radius)
         }
 
@@ -246,7 +252,7 @@ export default class Radar {
     }
 
     private drawRings(grid: svg): void {
-        for (const ringId of ringIds) {
+        for (const ringId of Object.keys(this.config.rings) as ringId[]) {
             grid.append('circle')
                 .attr('cx', 0)
                 .attr('cy', 0)
@@ -301,7 +307,7 @@ export default class Radar {
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '18');
 
-            for (const ringId of ringIds) {
+            for (const ringId of Object.keys(this.config.rings) as ringId[]) {
                 legend
                     .append('text')
                     .attr('transform', this.legendTransform(quadrantId, ringId))
@@ -421,13 +427,13 @@ export default class Radar {
     }
 
     private legendTransform(quadrant: quadrantId, ringId: ringId, index?: number): string {
-        const ringIndex = ringIds.indexOf(ringId);
+        const ringIndex = this.ringIds.indexOf(ringId);
 
         const dx = ringIndex < 2 ? 0 : 120;
         let dy = index == null ? -16 : index * 12;
 
         if (ringIndex % 2 === 1) {
-            dy = dy + 36 + this.segmentedBlips[quadrant][ringIds[ringIndex - 1]].length * 12;
+            dy = dy + 36 + this.segmentedBlips[quadrant][this.ringIds[ringIndex - 1]].length * 12;
         }
 
         return Radar.transform(

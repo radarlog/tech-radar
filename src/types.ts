@@ -31,9 +31,12 @@ export type quadrant = {
     legendOffset: cartesian;
 };
 
-export const ringIds = (<T extends string[]>(...o: T) => o)('adopt', 'trial', 'assess', 'hold');
-
-export type ringId = typeof ringIds[number];
+export enum ringId {
+    ADOPT = 'adopt',
+    TRIAL = 'trial',
+    ASSESS = 'assess',
+    HOLD = 'hold',
+}
 
 export type ring = {
     radius: number;
