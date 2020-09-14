@@ -6,9 +6,9 @@ export default class Radar {
 
     private readonly segmentedBlips: Record<qid, Record<rid, blip[]>>;
 
-    private blips: blip[] = [];
+    private readonly blips: blip[] = [];
 
-    private rids: rid[] = [];
+    private readonly rids: rid[] = [];
 
     constructor(private readonly config: config) {
         this.seed = config.seed;
