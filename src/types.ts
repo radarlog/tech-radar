@@ -6,8 +6,8 @@ export type config = Readonly<{
     height: number;
     colors: colors;
     title: string;
-    quadrants: Record<quadrantId, quadrant>;
-    rings: Record<ringId, ring>;
+    quadrants: Record<qid, quadrant>;
+    rings: Record<rid, ring>;
     entries: entry[];
     titleOffset: cartesian;
     footerOffset: cartesian;
@@ -19,7 +19,7 @@ export type colors = {
     inactive: string;
 };
 
-export enum quadrantId {
+export enum qid {
     FRAMEWORKS = 'Frameworks',
     DATA_MANAGEMENT = 'DataManagement',
     INFRASTRUCTURE = 'Infrastructure',
@@ -34,7 +34,7 @@ export type quadrant = {
     legendOffset: cartesian;
 };
 
-export enum ringId {
+export enum rid {
     ADOPT = 'adopt',
     TRIAL = 'trial',
     ASSESS = 'assess',
@@ -47,8 +47,8 @@ export type ring = {
 };
 
 export type entry = {
-    quadrantId: quadrantId;
-    ringId: ringId;
+    quadrantId: qid;
+    ringId: rid;
     label: string;
     active: boolean;
     moved: number;

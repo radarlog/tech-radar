@@ -1,19 +1,19 @@
 import { forceCollide, forceSimulation, select } from 'd3';
-import { blip, cartesian, config, entry, polar, quadrantId, ringId, segment, svg } from './types';
+import { blip, cartesian, config, entry, polar, qid, rid, segment, svg } from './types';
 
 export default class Radar {
     private seed: number;
 
-    private readonly segmentedBlips: Record<quadrantId, Record<ringId, blip[]>>;
+    private readonly segmentedBlips: Record<qid, Record<rid, blip[]>>;
 
     private blips: blip[] = [];
 
-    private ringIds: ringId[] = [];
+    private rids: rid[] = [];
 
     constructor(private readonly config: config) {
         this.seed = config.seed;
 
-        this.ringIds = (Object.keys(this.config.rings) as ringId[]).sort((a, b) => {
+        this.rids = (Object.keys(this.config.rings) as rid[]).sort((a, b) => {
             return this.config.rings[a].radius - this.config.rings[b].radius
         });
 
@@ -91,27 +91,27 @@ export default class Radar {
         };
     }
 
-    private segment(quadrantId: quadrantId, ringId: ringId): segment {
-        const ringIndex = this.ringIds.indexOf(ringId);
+    private segment(qid: qid, rid: rid): segment {
+        const ringIndex = this.rids.indexOf(rid);
 
         const polarMin: polar = {
-            t: this.config.quadrants[quadrantId].radialMin * Math.PI,
-            r: ringIndex === 0 ? 30 : this.config.rings[this.ringIds[ringIndex - 1]].radius,
+            t: this.config.quadrants[qid].radialMin * Math.PI,
+            r: ringIndex === 0 ? 30 : this.config.rings[this.rids[ringIndex - 1]].radius,
         };
 
         const polarMax: polar = {
-            t: this.config.quadrants[quadrantId].radialMax * Math.PI,
-            r: this.config.rings[ringId].radius,
+            t: this.config.quadrants[qid].radialMax * Math.PI,
+            r: this.config.rings[rid].radius,
         };
 
         const cartesianMin: cartesian = {
-            x: 15 * this.config.quadrants[quadrantId].factorX,
-            y: 15 * this.config.quadrants[quadrantId].factorY,
+            x: 15 * this.config.quadrants[qid].factorX,
+            y: 15 * this.config.quadrants[qid].factorY,
         };
 
         const cartesianMax: cartesian = {
-            x: this.config.rings[this.ringIds[this.ringIds.length - 1]].radius * this.config.quadrants[quadrantId].factorX,
-            y: this.config.rings[this.ringIds[this.ringIds.length - 1]].radius * this.config.quadrants[quadrantId].factorY,
+            x: this.config.rings[this.rids[this.rids.length - 1]].radius * this.config.quadrants[qid].factorX,
+            y: this.config.rings[this.rids[this.rids.length - 1]].radius * this.config.quadrants[qid].factorY,
         };
 
         return {
@@ -164,15 +164,15 @@ export default class Radar {
         }
     }
 
-    private createSegmentedBlips(): Record<quadrantId, Record<ringId, blip[]>> {
+    private createSegmentedBlips(): Record<qid, Record<rid, blip[]>> {
         const segmented: Record<string, Record<string, blip[]>> = {};
 
         // partition blips according to segments
-        for (const quadrantId of Object.keys(this.config.quadrants) as quadrantId[]) {
-            segmented[quadrantId] = {};
+        for (const qid of Object.keys(this.config.quadrants)) {
+            segmented[qid] = {};
 
-            for (const ringId of Object.keys(this.config.rings) as ringId[]) {
-                segmented[quadrantId][ringId] = [];
+            for (const rid of Object.keys(this.config.rings)) {
+                segmented[qid][rid] = [];
             }
         }
 
@@ -186,9 +186,9 @@ export default class Radar {
 
         // assign unique sequential id to each blip
         let blipId = 1;
-        for (const quadrantId of Object.keys(this.config.quadrants) as quadrantId[]) {
-            for (const ringId of Object.keys(this.config.rings) as ringId[]) {
-                const blips = segmented[quadrantId][ringId];
+        for (const qid of Object.keys(this.config.quadrants)) {
+            for (const rid of Object.keys(this.config.rings)) {
+                const blips = segmented[qid][rid];
 
                 blips.sort((a: blip, b: blip) => a.label.localeCompare(b.label));
 
@@ -217,8 +217,8 @@ export default class Radar {
     private drawLines(grid: svg): void {
         let maxRadius = 0;
 
-        for (const ringId of Object.keys(this.config.rings) as ringId[]) {
-            maxRadius = Math.max(maxRadius, this.config.rings[ringId].radius)
+        for (const rid of Object.keys(this.config.rings) as rid[]) {
+            maxRadius = Math.max(maxRadius, this.config.rings[rid].radius)
         }
 
         grid.append('line')
@@ -252,18 +252,18 @@ export default class Radar {
     }
 
     private drawRings(grid: svg): void {
-        for (const ringId of Object.keys(this.config.rings) as ringId[]) {
+        for (const rid of Object.keys(this.config.rings) as rid[]) {
             grid.append('circle')
                 .attr('cx', 0)
                 .attr('cy', 0)
-                .attr('r', this.config.rings[ringId].radius)
+                .attr('r', this.config.rings[rid].radius)
                 .style('fill', 'none')
                 .style('stroke', this.config.colors.grid)
                 .style('stroke-width', 1);
 
             grid.append('text')
-                .text(ringId.toUpperCase())
-                .attr('y', -this.config.rings[ringId].radius + 62)
+                .text(rid.toUpperCase())
+                .attr('y', -this.config.rings[rid].radius + 62)
                 .attr('text-anchor', 'middle')
                 .style('fill', '#e5e5e5')
                 .style('font-family', 'Arial, Helvetica')
@@ -296,33 +296,33 @@ export default class Radar {
     private drawLegend(radar: svg): void {
         const legend = radar.append('g');
 
-        for (const quadrantId of Object.keys(this.config.quadrants) as quadrantId[]) {
+        for (const qid of Object.keys(this.config.quadrants) as qid[]) {
             legend
                 .append('text')
                 .attr('transform', Radar.transform(
-                    this.config.quadrants[quadrantId].legendOffset.x,
-                    this.config.quadrants[quadrantId].legendOffset.y - 45
+                    this.config.quadrants[qid].legendOffset.x,
+                    this.config.quadrants[qid].legendOffset.y - 45
                 ))
-                .text(quadrantId.replace(/([a-z])([A-Z])/g, '$1 $2'))
+                .text(qid.replace(/([a-z])([A-Z])/g, '$1 $2'))
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '18');
 
-            for (const ringId of Object.keys(this.config.rings) as ringId[]) {
+            for (const rid of Object.keys(this.config.rings) as rid[]) {
                 legend
                     .append('text')
-                    .attr('transform', this.legendTransform(quadrantId, ringId))
-                    .text(ringId.toUpperCase())
+                    .attr('transform', this.legendTransform(qid, rid))
+                    .text(rid.toUpperCase())
                     .style('font-family', 'Arial, Helvetica')
                     .style('font-size', '12')
                     .style('font-weight', 'bold');
 
                 legend
-                    .selectAll('.legend' + quadrantId + ringId)
-                    .data(this.segmentedBlips[quadrantId][ringId])
+                    .selectAll('.legend' + qid + rid)
+                    .data(this.segmentedBlips[qid][rid])
                     .enter()
                     .append('text')
-                    .attr('transform', (d: blip, i: number) => this.legendTransform(quadrantId, ringId, i))
-                    .attr('class', 'legend' + quadrantId + ringId)
+                    .attr('transform', (d: blip, i: number) => this.legendTransform(qid, rid, i))
+                    .attr('class', 'legend' + qid + rid)
                     .attr('id', (d: blip) => 'legendItem' + d.id)
                     .text((d: blip) => d.id + '. ' + d.label)
                     .style('font-family', 'Arial, Helvetica')
@@ -426,14 +426,14 @@ export default class Radar {
             )));
     }
 
-    private legendTransform(quadrant: quadrantId, ringId: ringId, index?: number): string {
-        const ringIndex = this.ringIds.indexOf(ringId);
+    private legendTransform(quadrant: qid, rid: rid, index?: number): string {
+        const ringIndex = this.rids.indexOf(rid);
 
         const dx = ringIndex < 2 ? 0 : 120;
         let dy = index == null ? -16 : index * 12;
 
         if (ringIndex % 2 === 1) {
-            dy = dy + 36 + this.segmentedBlips[quadrant][this.ringIds[ringIndex - 1]].length * 12;
+            dy = dy + 36 + this.segmentedBlips[quadrant][this.rids[ringIndex - 1]].length * 12;
         }
 
         return Radar.transform(
