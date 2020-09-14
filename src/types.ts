@@ -21,7 +21,7 @@ export type colors = {
 
 export enum qid {
     FRAMEWORKS = 'Frameworks',
-    DATA_MANAGEMENT = 'DataManagement',
+    DATA_MANAGEMENT = 'Data Management',
     INFRASTRUCTURE = 'Infrastructure',
     LANGUAGES = 'Languages',
 }

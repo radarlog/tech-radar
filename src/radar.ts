@@ -303,7 +303,7 @@ export default class Radar {
                     this.config.quadrants[qid].legendOffset.x,
                     this.config.quadrants[qid].legendOffset.y - 45
                 ))
-                .text(qid.replace(/([a-z])([A-Z])/g, '$1 $2'))
+                .text(qid)
                 .style('font-family', 'Arial, Helvetica')
                 .style('font-size', '18');
 
