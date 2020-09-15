@@ -2,6 +2,13 @@
     "name": "tech-radar",
     "license": "MIT",
     "private": true,
+    "keywords": [
+        "Radar",
+        "Technology Radar",
+        "Technical landscape",
+        "Tech-radar",
+        "Visualization"
+    ],
     "engines": {
         "node": ">=12.18",
         "yarn": ">=1.22"
