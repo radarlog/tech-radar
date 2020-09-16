@@ -148,13 +148,8 @@ export default class Radar {
         const segmented = this.segment(entry.quadrantId, entry.ringId);
         const point = segmented.random();
 
-        return {
+        const blipSpecificProperties = {
             id: '',
-            quadrantId: entry.quadrantId,
-            ringId: entry.ringId,
-            label: entry.label,
-            active: entry.active,
-            moved: entry.moved,
             segment: segmented,
             x: point.x,
             y: point.y,
@@ -162,6 +157,8 @@ export default class Radar {
                 ? this.config.rings[entry.ringId].color
                 : this.config.colors.inactive
         }
+
+        return { ...entry, ...blipSpecificProperties }
     }
 
     private createSegmentedBlips(): Record<qid, Record<rid, blip[]>> {
