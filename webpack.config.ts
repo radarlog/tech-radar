@@ -27,7 +27,7 @@ const config: Configuration = {
         extensions: ['.ts', '.js'],
     },
     output: {
-        filename: '[name]-[hash:12].js',
+        filename: '[name]-[contenthash:12].js',
         path: path.resolve(__dirname, outputDirectory),
         publicPath: '/',
     },
