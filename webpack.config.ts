@@ -9,8 +9,10 @@ const config: Configuration = {
     devServer: {
         hot: true,
         compress: true,
-        contentBase: outputDirectory,
-        publicPath: '/',
+        static: {
+            directory: outputDirectory,
+            publicPath: '/',
+        },
     },
     entry: {
         index: './src/index.ts',

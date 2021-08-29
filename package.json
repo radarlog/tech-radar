@@ -19,23 +19,22 @@
         "linter": "eslint src"
     },
     "dependencies": {
-        "d3": "^6.6.2"
+        "d3": "^7.0.0"
     },
     "devDependencies": {
-        "@types/d3": "^6.3.0",
-        "@types/node": "^14.14.37",
-        "@types/webpack": "^4.41.27",
-        "@types/webpack-dev-server": "^3.11.3",
-        "@typescript-eslint/eslint-plugin": "^4.22.0",
-        "@typescript-eslint/parser": "^4.22.0",
+        "@types/d3": "^7.0.0",
+        "@types/node": "^16.7.5",
+        "@types/webpack-dev-server": "^4.0.3",
+        "@typescript-eslint/eslint-plugin": "^4.29.3",
+        "@typescript-eslint/parser": "^4.29.3",
         "clean-webpack-plugin": "^4.0.0-alpha.0",
-        "eslint": "^7.24.0",
-        "html-webpack-plugin": "^5.3.1",
-        "ts-loader": "^8.1.0",
-        "ts-node": "^9.1.1",
-        "typescript": "^4.2.4",
-        "webpack": "^5.33.2",
-        "webpack-cli": "^4.6.0",
-        "webpack-dev-server": "^3.11.2"
+        "eslint": "^7.32.0",
+        "html-webpack-plugin": "^5.3.2",
+        "ts-loader": "^9.2.5",
+        "ts-node": "^10.2.1",
+        "typescript": "^4.4.2",
+        "webpack": "^5.51.1",
+        "webpack-cli": "^4.8.0",
+        "webpack-dev-server": "^4.0.0"
     }
 }

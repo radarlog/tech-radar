@@ -3,7 +3,7 @@ version: '3.4'
 services:
     nodejs:
         container_name: techradar-nodejs
-        image: node:15.14-alpine3.13
+        image: node:16.8.0-alpine3.14
         restart: ${DOCKER_RESTART}
         user: ${HOST_UID:-1000}:${HOST_GID:-1001}
         ports:
