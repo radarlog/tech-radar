@@ -1,19 +1,22 @@
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
-import { Configuration } from 'webpack';
+import type { Configuration } from 'webpack';
+import type { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 
 const outputDirectory = 'build';
 
-const config: Configuration = {
-    devServer: {
-        hot: true,
-        compress: true,
-        static: {
-            directory: outputDirectory,
-            publicPath: '/',
-        },
+const devServerConfig: DevServerConfiguration = {
+    hot: true,
+    compress: true,
+    static: {
+        directory: outputDirectory,
+        publicPath: '/',
     },
+};
+
+const config: Configuration = {
+    devServer: devServerConfig,
     entry: {
         index: './src/index.ts',
     },
