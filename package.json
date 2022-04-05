@@ -16,7 +16,7 @@
     "scripts": {
         "build": "webpack --mode production",
         "dev": "webpack serve --mode development --devtool inline-source-map",
-        "linter": "eslint src"
+        "linter": "eslint src webpack.config.ts"
     },
     "dependencies": {
         "d3": "^7.4"
