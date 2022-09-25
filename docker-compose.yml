@@ -4,7 +4,6 @@ services:
     nodejs:
         container_name: techradar-nodejs
         image: node:18.8-alpine3.16
-        restart: ${DOCKER_RESTART}
         user: ${HOST_UID:-1000}:${HOST_GID:-1001}
         ports:
             - 8020:8020
