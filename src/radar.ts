@@ -318,17 +318,17 @@ export default class Radar {
                     .data(this.segmentedBlips[qid][rid])
                     .enter()
                     .append('text')
-                    .attr('transform', (d: blip, i: number) => this.legendTransform(qid, rid, i))
+                    .attr('transform', (_d: blip, i: number) => this.legendTransform(qid, rid, i))
                     .attr('class', 'legend' + qid + rid)
                     .attr('id', (d: blip) => 'legendItem' + d.id)
                     .text((d: blip) => d.id + '. ' + d.label)
                     .style('font-family', 'Arial, Helvetica')
                     .style('font-size', '11')
-                    .on('mouseover', (event: Event, d: blip) => {
+                    .on('mouseover', (_event: Event, d: blip) => {
                         Radar.showBubble(d);
                         Radar.highlightLegendItem(d);
                     })
-                    .on('mouseout', (event: Event, d: blip) => {
+                    .on('mouseout', (_event: Event, d: blip) => {
                         Radar.hideBubble();
                         Radar.unhighlightLegendItem(d);
                     });
@@ -373,11 +373,11 @@ export default class Radar {
             .append('g')
             .attr('class', 'blip')
             .attr('transform', (d: blip, i: number) => this.legendTransform(d.quadrantId, d.ringId, i))
-            .on('mouseover', (event: Event, d: blip) => {
+            .on('mouseover', (_event: Event, d: blip) => {
                 Radar.showBubble(d);
                 Radar.highlightLegendItem(d);
             })
-            .on('mouseout', (event: Event, d: blip) => {
+            .on('mouseout', (_event: Event, d: blip) => {
                 Radar.hideBubble();
                 Radar.unhighlightLegendItem(d);
             });
