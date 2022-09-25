@@ -43,7 +43,9 @@ jobs:
                     restore-keys: ${{ env.CACHE_KEY_PREFIX }}
 
             -   name: Install frontend dependencies
-                run: docker-compose run -T --rm -e YARN_CACHE_FOLDER=$YARN_CACHE_DIR nodejs yarn install --frozen-lockfile --non-interactive
+                run: |
+                    mkdir -p $YARN_CACHE_DIR
+                    docker-compose run -T --rm -e YARN_CACHE_FOLDER=$YARN_CACHE_DIR nodejs yarn install --frozen-lockfile --non-interactive
 
             -   name: Run docker-compose stack
                 run: |
