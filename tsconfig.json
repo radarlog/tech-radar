@@ -1,14 +1,26 @@
 {
     "compilerOptions": {
-        "outDir": "./build/",
         "allowJs": false,
         "esModuleInterop": true,
-        "module": "CommonJS",
+        "isolatedModules": true,
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "module": "ES2022",
+        "moduleResolution": "Node",
+        "noEmit": true,
         "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "removeComments": true,
+        "resolveJsonModule": false,
+        "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "target": "ES2019"
+        "target": "ES2022",
+        "useDefineForClassFields": true
     },
     "include": [
         "src/**/*.ts"
