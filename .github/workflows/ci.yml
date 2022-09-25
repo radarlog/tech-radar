@@ -1,0 +1,55 @@
+name: CI
+
+on:
+    pull_request:
+        paths-ignore:
+            - '**.md'
+    push:
+        paths-ignore:
+            - '**.md'
+
+jobs:
+    tests:
+        name: Tests on ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        continue-on-error: ${{ matrix.experimental }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os:
+                    - ubuntu-20.04
+                    - ubuntu-22.04
+                experimental: [ false ]
+
+        env:
+            MYUID: 1001
+            MYGID: 121
+            YARN_CACHE_DIR: .yarn/
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   uses: satackey/action-docker-layer-caching@v0.0.11
+                continue-on-error: true
+
+            -   name: Yarn Cache
+                uses: actions/cache@v3
+                env:
+                    CACHE_KEY_PREFIX: ${{ matrix.os }}-yarn-v2
+                with:
+                    path: ${{ env.YARN_CACHE_DIR }}
+                    key: ${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
+                    restore-keys: ${{ env.CACHE_KEY_PREFIX }}
+
+            -   name: Install frontend dependencies
+                run: docker-compose run -T --rm -e YARN_CACHE_FOLDER=$YARN_CACHE_DIR nodejs yarn install --frozen-lockfile --non-interactive
+
+            -   name: Run docker-compose stack
+                run: |
+                    docker-compose up -d
+                    docker-compose ps
+
+            -   name: Check Coding Standards
+                run: |
+                    docker-compose exec -T nodejs yarn linter
