@@ -35,6 +35,11 @@ jobs:
                     key: ${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
                     restore-keys: ${{ env.CACHE_KEY_PREFIX }}
 
+            -   name: Set environments variables
+                run: |
+                    echo "HOST_UID=$HOST_UID" >> .env
+                    echo "HOST_GID=$HOST_GID" >> .env
+
             -   name: Install frontend dependencies
                 run: make yarn
 
