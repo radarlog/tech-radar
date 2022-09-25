@@ -22,7 +22,8 @@ then navigate to `http://localhost:8020/` with your favorite browser.
 
 ## Configuration
 
-Main configuration file is `src/config.ts`. All entries (blips) have been placed in a separate file `src/entries.ts`.
+Main configuration file is `src/ts/config.ts`. All entries (blips) have been placed in a separate
+file `src/ts/entries.ts`.
 
 ## License
 
