@@ -24,7 +24,7 @@ jobs:
         env:
             HOST_UID: 1001
             HOST_GID: 121
-            YARN_CACHE_DIR: .yarn/
+            YARN_CACHE_FOLDER: .yarn/
 
         steps:
             -   name: Checkout
@@ -38,12 +38,12 @@ jobs:
                 env:
                     CACHE_KEY_PREFIX: ${{ matrix.os }}-yarn-v2
                 with:
-                    path: ${{ env.YARN_CACHE_DIR }}
+                    path: ${{ env.YARN_CACHE_FOLDER }}
                     key: ${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
                     restore-keys: ${{ env.CACHE_KEY_PREFIX }}
 
             -   name: Install frontend dependencies
-                run: docker-compose run -T --rm -e YARN_CACHE_FOLDER=$YARN_CACHE_DIR nodejs yarn install --frozen-lockfile --non-interactive
+                run: docker-compose run -T --rm nodejs yarn install --frozen-lockfile --non-interactive
 
             -   name: Run docker-compose stack
                 run: |
