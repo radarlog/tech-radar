@@ -38,11 +38,5 @@ jobs:
             -   name: Install frontend dependencies
                 run: docker-compose run -T --rm nodejs yarn install --frozen-lockfile --non-interactive
 
-            -   name: Run docker-compose stack
-                run: |
-                    docker-compose up -d
-                    docker-compose ps
-
             -   name: Check Coding Standards
-                run: |
-                    docker-compose exec -T nodejs yarn linter
+                run: docker-compose run -T --rm nodejs yarn linter
