@@ -1,8 +1,6 @@
 .SILENT:
 .DEFAULT_GOAL := help
 
-include .env
-
 .PHONY: help
 help: ; $(info Usage:)
 	echo "make run                      build environment"

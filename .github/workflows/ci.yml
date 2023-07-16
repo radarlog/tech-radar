@@ -1,0 +1,47 @@
+name: CI
+
+on:
+    pull_request:
+        paths-ignore:
+            - '**.md'
+    push:
+        paths-ignore:
+            - '**.md'
+
+jobs:
+    tests:
+        name: Tests
+        runs-on: ubuntu-22.04
+        continue-on-error: false
+
+        env:
+            HOST_UID: 1001
+            HOST_GID: 121
+            YARN_CACHE_FOLDER: .yarn/
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   uses: satackey/action-docker-layer-caching@v0.0.11
+                continue-on-error: true
+
+            -   name: Yarn Cache
+                uses: actions/cache@v3
+                env:
+                    CACHE_KEY_PREFIX: yarn-v1
+                with:
+                    path: ${{ env.YARN_CACHE_FOLDER }}
+                    key: ${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
+                    restore-keys: ${{ env.CACHE_KEY_PREFIX }}
+
+            -   name: Set environments variables
+                run: |
+                    echo "HOST_UID=$HOST_UID" >> .env
+                    echo "HOST_GID=$HOST_GID" >> .env
+
+            -   name: Install frontend dependencies
+                run: make yarn
+
+            -   name: Check Coding Standards
+                run: make linter
