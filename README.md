@@ -6,9 +6,9 @@ the technology landscape. This is a rewritten on Typescript [version from Zaland
 which in its own turn is based on the [pioneering work by ThoughtWorks](https://www.thoughtworks.com/radar).
 
 ### Requirements
-* Node.js >= 18.8
+* Node.js >= 20.0
 * Yarn >= 1.22
-* Typescript >= 4.8
+* Typescript >= 5.1
 
 ## Running locally
 
